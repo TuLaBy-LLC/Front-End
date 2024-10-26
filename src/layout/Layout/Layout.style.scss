@@ -1,0 +1,26 @@
+// ----------------------------------------------
+// Layout Style
+// ----------------------------------------------
+
+.page-wrapper {
+  position: relative;
+}
+
+.body-wrapper {
+  position: relative;
+
+  > .container-fluid {
+    max-width: $boxed-width;
+    margin: 0 auto;
+    padding: $grid-gutter-width;
+    transition: 0.2s ease-in;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .body-wrapper {
+    > .container-fluid {
+      padding: 30px 20px;
+    }
+  }
+}

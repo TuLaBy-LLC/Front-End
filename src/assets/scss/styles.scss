@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap");
+
+@import "./variables/variables";
+
+// Import Bootstrap source files (Required file)
+@import "./../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/bootstrap/dist/css/bootstrap-grid.rtl.min.css";
+
+@import "./variables/theme-variables";
+
+// Component Style (Required file)
+@import "./component/reboot";
+@import "./../../components/SideBar/SideBar.style.scss";
+@import "./../../components/Header/Header.style.scss";
+@import "./../../components/SubNavBar/SubNavBar.style.scss";
+@import "./../../components/Auth/LoginForm/LoginForm.style.scss";
+@import "./../../components/Auth/LoginPopUp/LoginPopUp.style.scss";
+@import "./../../components/Auth/input-field/InputField.style.scss";
+@import "./../../components/Auth/Security/Security.style.scss";
+@import "./../../components/loading/Loading.style.scss";
+@import "./../../components/ProfileCard/ProfileCard.style.scss";
+@import "./../../components/CountDownTimer/CountDownTimer.style.scss";
+@import "./../../components/EventTable/EventTable.style.scss";
+
+@import './../../components/News/SingleNews/SingleNews.style.scss';
+@import './../../components/News/NewsHeader/NewsHeader.style.scss';
+@import './../../components/News/NewsSlider/NewsSlider.style.scss';
+@import './../../components/SliderWithThumbnail/SliderWithThumbnail.style.scss';
+
+@import './../../components/ProfileCard/ProFileImage/ProFileImage.style.scss';
+
+// Layout style (Required file)
+@import "./../../layout/Layout/Layout.style.scss";
+@import "./../../layout/News/News.style.scss";
+@import "./../../layout/News/NewsFeedSlider/NewsFeedSlider.style.scss";
+
+
+// Pages style (Required file)
+@import "./../../App.scss";
+@import "./../../index.scss";
+@import "./../../pages/Home/Home.style.scss";
+@import "./../../pages/Profile/Profile.style.scss";
+@import "./../../pages/News/News.style.scss";

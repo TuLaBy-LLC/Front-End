@@ -1,0 +1,23 @@
+.news-slider {
+  .news-slider .slick-arrow {
+    top: 100%;
+    transform: translate(-50%, 0);
+    left: 50%;
+
+    &::before,&::after{
+        color: var(--bs-dark) !important;
+    }
+  }
+
+  .slick-slide>div{
+    width: 100%;
+  }
+  
+  .news-slider .slick-arrow.slick-prev {
+    transform: translate(calc(-50% - 25%), 0);
+  }
+
+  .news-slider .slick-arrow.slick-next {
+    transform: translate(calc(50% + 25%), 0);
+  }
+}

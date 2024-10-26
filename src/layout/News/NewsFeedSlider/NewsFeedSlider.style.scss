@@ -1,0 +1,26 @@
+/* Position arrows at the top of the slider */
+.news-slider-container.slick-prev,
+.news-slider-container.slick-next {
+  position: absolute;
+  top: -40px; /* Adjust to move arrows above the slider */
+  z-index: 1;
+}
+
+/* Adjust arrow appearance if needed */
+.news-slider-container.slick-prev::before,
+.news-slider-container.slick-next::before {
+  font-size: 30px; /* Adjust size of the arrow */
+  color: black; /* Change arrow color */
+}
+
+/* Optional: Add padding to the slider items for spacing */
+.news-slider-container.news-slide {
+  padding: 10px; /* Adds space between the slider items */
+}
+.news-slider-container .slick-track {
+  padding-block: 15px;
+  background: var(--bs-light);
+}
+.news-slider-container .slick-list {
+  border-radius: 0.8rem;
+}

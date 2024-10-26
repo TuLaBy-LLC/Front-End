@@ -1,0 +1,38 @@
+.card-profile {
+  margin-top: 30px;
+  text-align: center;
+
+  .card-avatar {
+    margin: -50px auto 0;
+    border-radius: 50%;
+    overflow: hidden;
+    padding: 0;
+
+    & + .card-body {
+      margin-top: 15px;
+    }
+  }
+
+  .card-body + .card-footer {
+    margin-top: -15px;
+  }
+
+  .card-footer {
+    .btn.btn-just-icon {
+      font-size: 20px;
+      padding: 12px 12px;
+      line-height: 1em;
+    }
+  }
+
+  &.card-plain {
+    .card-avatar {
+      margin-top: 0;
+    }
+  }
+
+  .card-avatar {
+    width: 150px;
+    height: 150px;
+  }
+}

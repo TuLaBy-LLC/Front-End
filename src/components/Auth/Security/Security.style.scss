@@ -1,0 +1,12 @@
+/* transitions.css */
+.form-container {
+    position: relative;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  }
+  
+  .form-container.hidden {
+    opacity: 0;
+    transform: translateX(100%);
+    position: absolute;
+  }
+  

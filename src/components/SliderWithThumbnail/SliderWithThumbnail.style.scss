@@ -1,0 +1,20 @@
+.images-slider .keen-slider__slide img {
+  object-fit: cover;
+}
+
+.thumbnail-slider {
+  margin-top: 10px;
+}
+
+.thumbnail-slide {
+  cursor: pointer;
+}
+
+.thumbnail-slide img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail-slide.active {
+  border: 2px solid var(--bs-primary);
+}

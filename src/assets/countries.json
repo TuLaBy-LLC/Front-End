@@ -1,0 +1,317 @@
+[
+  {
+    "en": "Afghanistan",
+    "ar": "أفغانستان",
+    "flag": "https://flagcdn.com/af.svg"
+  },
+  {
+    "en": "Albania",
+    "ar": "ألبانيا",
+    "flag": "https://flagcdn.com/al.svg"
+  },
+  {
+    "en": "Algeria",
+    "ar": "الجزائر",
+    "flag": "https://flagcdn.com/dz.svg"
+  },
+  {
+    "en": "Angola",
+    "ar": "أنغولا",
+    "flag": "https://flagcdn.com/ao.svg"
+  },
+  {
+    "en": "Argentina",
+    "ar": "الأرجنتين",
+    "flag": "https://flagcdn.com/ar.svg"
+  },
+  {
+    "en": "Australia",
+    "ar": "أستراليا",
+    "flag": "https://flagcdn.com/au.svg"
+  },
+  {
+    "en": "Austria",
+    "ar": "النمسا",
+    "flag": "https://flagcdn.com/at.svg"
+  },
+  {
+    "en": "Bangladesh",
+    "ar": "بنغلاديش",
+    "flag": "https://flagcdn.com/bd.svg"
+  },
+  {
+    "en": "Belgium",
+    "ar": "بلجيكا",
+    "flag": "https://flagcdn.com/be.svg"
+  },
+  {
+    "en": "Brazil",
+    "ar": "البرازيل",
+    "flag": "https://flagcdn.com/br.svg"
+  },
+  {
+    "en": "Canada",
+    "ar": "كندا",
+    "flag": "https://flagcdn.com/ca.svg"
+  },
+  {
+    "en": "Chile",
+    "ar": "تشيلي",
+    "flag": "https://flagcdn.com/cl.svg"
+  },
+  {
+    "en": "China",
+    "ar": "الصين",
+    "flag": "https://flagcdn.com/cn.svg"
+  },
+  {
+    "en": "Colombia",
+    "ar": "كولومبيا",
+    "flag": "https://flagcdn.com/co.svg"
+  },
+  {
+    "en": "Czech Republic",
+    "ar": "التشيك",
+    "flag": "https://flagcdn.com/cz.svg"
+  },
+  {
+    "en": "Denmark",
+    "ar": "الدانمارك",
+    "flag": "https://flagcdn.com/dk.svg"
+  },
+  {
+    "en": "Egypt",
+    "ar": "مصر",
+    "flag": "https://flagcdn.com/eg.svg"
+  },
+  {
+    "en": "Ecuador",
+    "ar": "الإكوادور",
+    "flag": "https://flagcdn.com/ec.svg"
+  },
+  {
+    "en": "Finland",
+    "ar": "فنلندا",
+    "flag": "https://flagcdn.com/fi.svg"
+  },
+  {
+    "en": "France",
+    "ar": "فرنسا",
+    "flag": "https://flagcdn.com/fr.svg"
+  },
+  {
+    "en": "Germany",
+    "ar": "ألمانيا",
+    "flag": "https://flagcdn.com/de.svg"
+  },
+  {
+    "en": "Greece",
+    "ar": "اليونان",
+    "flag": "https://flagcdn.com/gr.svg"
+  },
+  {
+    "en": "Hungary",
+    "ar": "هنغاريا",
+    "flag": "https://flagcdn.com/hu.svg"
+  },
+  {
+    "en": "India",
+    "ar": "الهند",
+    "flag": "https://flagcdn.com/in.svg"
+  },
+  {
+    "en": "Indonesia",
+    "ar": "إندونيسيا",
+    "flag": "https://flagcdn.com/id.svg"
+  },
+  {
+    "en": "Iran",
+    "ar": "إيران",
+    "flag": "https://flagcdn.com/ir.svg"
+  },
+  {
+    "en": "Iraq",
+    "ar": "العراق",
+    "flag": "https://flagcdn.com/iq.svg"
+  },
+  {
+    "en": "Ireland",
+    "ar": "أيرلندا",
+    "flag": "https://flagcdn.com/ie.svg"
+  },
+  {
+    "en": "Palastin",
+    "ar": "دولة فلسطين الحره",
+    "flag": "https://flagcdn.com/ps.svg"
+  },
+  {
+    "en": "Italy",
+    "ar": "إيطاليا",
+    "flag": "https://flagcdn.com/it.svg"
+  },
+  {
+    "en": "Japan",
+    "ar": "اليابان",
+    "flag": "https://flagcdn.com/jp.svg"
+  },
+  {
+    "en": "Kazakhstan",
+    "ar": "كازاخستان",
+    "flag": "https://flagcdn.com/kz.svg"
+  },
+  {
+    "en": "Kuwait",
+    "ar": "الكويت",
+    "flag": "https://flagcdn.com/kw.svg"
+  },
+  {
+    "en": "Malaysia",
+    "ar": "ماليزيا",
+    "flag": "https://flagcdn.com/my.svg"
+  },
+  {
+    "en": "Mexico",
+    "ar": "المكسيك",
+    "flag": "https://flagcdn.com/mx.svg"
+  },
+  {
+    "en": "Morocco",
+    "ar": "المغرب",
+    "flag": "https://flagcdn.com/ma.svg"
+  },
+  {
+    "en": "Netherlands",
+    "ar": "هولندا",
+    "flag": "https://flagcdn.com/nl.svg"
+  },
+  {
+    "en": "New Zealand",
+    "ar": "نيوزيلندا",
+    "flag": "https://flagcdn.com/nz.svg"
+  },
+  {
+    "en": "Nigeria",
+    "ar": "نيجيريا",
+    "flag": "https://flagcdn.com/ng.svg"
+  },
+  {
+    "en": "Norway",
+    "ar": "النرويج",
+    "flag": "https://flagcdn.com/no.svg"
+  },
+  {
+    "en": "Pakistan",
+    "ar": "باكستان",
+    "flag": "https://flagcdn.com/pk.svg"
+  },
+  {
+    "en": "Peru",
+    "ar": "بيرو",
+    "flag": "https://flagcdn.com/pe.svg"
+  },
+  {
+    "en": "Philippines",
+    "ar": "الفلبين",
+    "flag": "https://flagcdn.com/ph.svg"
+  },
+  {
+    "en": "Poland",
+    "ar": "بولندا",
+    "flag": "https://flagcdn.com/pl.svg"
+  },
+  {
+    "en": "Portugal",
+    "ar": "البرتغال",
+    "flag": "https://flagcdn.com/pt.svg"
+  },
+  {
+    "en": "Qatar",
+    "ar": "قطر",
+    "flag": "https://flagcdn.com/qa.svg"
+  },
+  {
+    "en": "Romania",
+    "ar": "رومانيا",
+    "flag": "https://flagcdn.com/ro.svg"
+  },
+  {
+    "en": "Russia",
+    "ar": "روسيا",
+    "flag": "https://flagcdn.com/ru.svg"
+  },
+  {
+    "en": "Saudi Arabia",
+    "ar": "المملكة العربية السعودية",
+    "flag": "https://flagcdn.com/sa.svg"
+  },
+  {
+    "en": "Singapore",
+    "ar": "سنغافورة",
+    "flag": "https://flagcdn.com/sg.svg"
+  },
+  {
+    "en": "South Africa",
+    "ar": "جنوب أفريقيا",
+    "flag": "https://flagcdn.com/za.svg"
+  },
+  {
+    "en": "South Korea",
+    "ar": "كوريا الجنوبية",
+    "flag": "https://flagcdn.com/kr.svg"
+  },
+  {
+    "en": "Spain",
+    "ar": "إسبانيا",
+    "flag": "https://flagcdn.com/es.svg"
+  },
+  {
+    "en": "Sudan",
+    "ar": "السودان",
+    "flag": "https://flagcdn.com/sd.svg"
+  },
+  {
+    "en": "Sweden",
+    "ar": "السويد",
+    "flag": "https://flagcdn.com/se.svg"
+  },
+  {
+    "en": "Switzerland",
+    "ar": "سويسرا",
+    "flag": "https://flagcdn.com/ch.svg"
+  },
+  {
+    "en": "Thailand",
+    "ar": "تايلاند",
+    "flag": "https://flagcdn.com/th.svg"
+  },
+  {
+    "en": "Turkey",
+    "ar": "تركيا",
+    "flag": "https://flagcdn.com/tr.svg"
+  },
+  {
+    "en": "Ukraine",
+    "ar": "أوكرانيا",
+    "flag": "https://flagcdn.com/ua.svg"
+  },
+  {
+    "en": "United Arab Emirates",
+    "ar": "الإمارات العربية المتحدة",
+    "flag": "https://flagcdn.com/ae.svg"
+  },
+  {
+    "en": "United Kingdom",
+    "ar": "المملكة المتحدة",
+    "flag": "https://flagcdn.com/gb.svg"
+  },
+  {
+    "en": "United States",
+    "ar": "الولايات المتحدة",
+    "flag": "https://flagcdn.com/us.svg"
+  },
+  {
+    "en": "Vietnam",
+    "ar": "فيتنام",
+    "flag": "https://flagcdn.com/vn.svg"
+  }
+]

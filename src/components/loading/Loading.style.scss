@@ -1,0 +1,48 @@
+.loading-parent {
+    position: absolute;
+    inset: 0;
+    background-color: var(--bs-light);
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(1);
+    transition: .3s;
+}
+
+.clear-loader {
+    animation: hide 0.7s linear 1 forwards;
+}
+
+@keyframes hide {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    75% {
+        transform: scale(0.5);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+/* Spinner */
+
+.loader {
+    width: 20px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 8px solid;
+    animation: l1 1s infinite;
+  }
+  @keyframes l1 {to{transform: rotate(.5turn)}}

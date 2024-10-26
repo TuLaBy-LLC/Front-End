@@ -1,0 +1,99 @@
+$color_4: #232323;
+
+.single-news {
+  transition: 0.3s;
+
+  &::after,
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: .25;
+    transition: 0.5s;
+  }
+  &::after {
+    width: 2px;
+    height: 100%;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    background: linear-gradient(to top, var(--bs-primary), var(--bs-pink));
+  }
+  &:hover::after {
+    transform: scaleY(1);
+  }
+  &::before {
+    height: 2px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(to right, var(--bs-primary), var(--bs-pink));
+  }
+  &:hover::before {
+    transform: scaleX(1);
+  }
+
+  .image-holder,
+  .card-img-top {
+    height: 100px !important;
+    object-fit: contain;
+  }
+
+  .blog-content,
+  .card-body {
+    .post-date {
+      font-size: 0.8em;
+      color: var(--bs-red);
+      margin-bottom: 5px;
+      transition-duration: 0.3s;
+    }
+    .post-title {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9em;
+      margin-bottom: 0;
+      color: $color_4;
+      transition-duration: 0.3s;
+      &:hover {
+        font-weight: 600;
+        color: var(--bs-primary);
+      }
+      &:focus {
+        font-weight: 600;
+        color: var(--bs-primary);
+      }
+    }
+    .post-title:hover + span.tooltip {
+      opacity: 1;
+      z-index: 999 !important;
+    }
+  }
+}
+span.tooltip {
+  position: absolute;
+  top: 0;
+  transform: translate(-10%, calc(-60% - 5px));
+  padding: 10px;
+  display: block;
+  max-width: 200px;
+  font-size: 14px;
+  color: var(--bs-primary);
+  background: var(--bs-white);
+  border-radius: 5px;
+  z-index: -5 !important;
+  transition: 0.3s;
+  box-shadow: var(--bs-box-shadow-lg);
+}
+
+span.tooltip:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-width: 15px;
+  border-style: solid;
+  border-color: var(--bs-gray-100) transparent transparent transparent;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}

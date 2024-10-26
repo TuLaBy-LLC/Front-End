@@ -1,0 +1,14 @@
+.header-title h2 {
+  z-index: 5;
+  position: relative;
+}
+ .header-title::before {
+  content: "";
+  position: absolute;
+  top: 60%;
+  right: 0;
+  width: 100%;
+  z-index: 4;
+  height: 2px;
+  background-color: rgba(var(--bs-primary-rgb), 0.1);
+}

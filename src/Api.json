@@ -1,0 +1,45 @@
+{
+  "profile": {
+    "profile": "/api/Students/profile",
+    "editProfile": "/api/Account/update",
+    "updateImage": "/api/Account/updateImage"
+  },
+  "auth": {
+    "login": "/api/Account/login",
+    "forgetPassword": "/api/ForgotPassword",
+    "changePassword": "/api/Account/change-password"
+  },
+  "news": {
+    "getAllNewsPublic": "/api/News/public",
+    "getAllNewsPrivate": "/api/News/breaking",
+    "getNews": "/api/News",
+
+    "action": {
+      "base": "/api/News",
+      "likes": {
+        "add":"likes/increment",
+        "remove":"likes/decrement"
+      },
+      "views": "views"
+    }
+  },
+
+  "getSchedules": "/api/Schedules",
+  "getSchedule": "/api/Schedules/Schedule",
+
+  "getLecture": "/api/Lectures",
+  "getNextLecture": "/api/Lectures/upcoming",
+  "getActivatedLectures": "/api/Lectures/activated",
+  "getLectureStatistics": "/api/Lectures/LecturesStatistics",
+
+  "getSession": "/api/Sessions",
+  "getNextSession": "/api/Sessions/upcoming",
+  "getActivatedSessions": "/api/Sessions/activated",
+  "getSessionStatistics": "/api/Sessions/SessionsStatistics",
+
+  "getSubjects": "/api/Subjects",
+  "getSessions": "/api/getAllSessionSubjects",
+
+  "recordLectureAttend": "/api/LecturesAttendances/RecordAttendance",
+  "recordSessionAttend": "/api/SessionsAttendances/RecordAttendance"
+}

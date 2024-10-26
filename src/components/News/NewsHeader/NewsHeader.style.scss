@@ -1,0 +1,28 @@
+.single-news.header-news {
+  transition: 0.3s;
+
+  .image-holder,
+  .card-img-top {
+    height: 250px !important;
+    object-fit: contain;
+  }
+
+  .post-date {
+    margin-bottom: 10px;
+  }
+  .post-title {
+    font-size: 1em;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .title {
+    transition: 0.3s;
+    color: var(--bs-dark) !important;
+    &:hover {
+      color: var(--bs-primary) !important;
+    }
+  }
+}

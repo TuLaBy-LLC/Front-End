@@ -1,0 +1,60 @@
+// ----------------------------------------------
+// Reboot Style
+// ----------------------------------------------
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: $primary;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+:focus {
+    outline: 0;
+    box-shadow: none !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.calendar-events {
+    cursor: move;
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+@media screen and (max-width:991px) {
+    .fs-35{
+        font-size: .6rem !important;
+    }
+    .fs-4{
+        font-size: .7rem !important;
+    }
+    .fs-5{
+        font-size: 1.05rem !important;
+    }
+    .fs-6{
+        font-size: 1.45rem !important;
+    }
+    .fs-7{
+        font-size: 1.55rem !important;
+    }
+    .fs-8{
+        font-size: 1rem !important;
+    }
+    
+}

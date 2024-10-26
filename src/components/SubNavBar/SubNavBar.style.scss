@@ -1,0 +1,66 @@
+.sub-navbar {
+  position: relative;
+  nav {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+    transform: translateY(-100%);
+    transition: 0.3s;
+
+    &:hover {
+      transform: translateY(0);
+    }
+  }
+  &:hover nav {
+    transform: translateY(0);
+  }
+}
+.hover-event {
+  position: relative;
+}
+
+.hover-event::after,
+.hover-event::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: var(--bs-primary);
+  bottom: 10%;
+  left: 0%;
+  transition: 0.3s;
+}
+
+.active a {
+  color: var(--bs-primary) !important;
+}
+
+.hover-event:hover::after,
+.hover-event:hover::before,
+.active::after,
+.active::before {
+  width: 10%;
+}
+
+@media screen and (min-width: 992px) {
+  .hover-event::after,
+  .hover-event::before,
+  .active::after,
+  .active::before {
+    bottom: 10%;
+    left: 10%;
+  }
+
+  .hover-event:hover::after,
+  .hover-event:hover::before,
+  .active::after,
+  .active::before {
+    width: 60%;
+  }
+}
+
+.icon-hover:hover {
+  transition: 0.2s;
+  color: var(--bs-primary) !important;
+}
