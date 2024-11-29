@@ -26,7 +26,7 @@ const signalRService = (function () {
      */
     const showToast = (icon, title) => {
         // Toast.fire({ icon, title });
-        console.log({ icon, title });
+        //console.log({ icon, title });
     };
 
     /**
@@ -55,7 +55,7 @@ const signalRService = (function () {
 
                 // Define event handlers only once
                 connection.on("ReceiveNotification", (data) => {
-                    console.log("Received notification:", data);
+                    //console.log("Received notification:", data);
                 });
 
                 connection.onclose((err) => {
@@ -65,12 +65,12 @@ const signalRService = (function () {
                 });
 
                 connection.onreconnecting(() => {
-                    console.log("Reconnecting SignalR...");
+                    //console.log("Reconnecting SignalR...");
                     showToast("info", "Reconnecting to the server...");
                 });
 
                 connection.onreconnected(() => {
-                    console.log("SignalR reconnected successfully!");
+                    //console.log("SignalR reconnected successfully!");
                     showToast("success", "Reconnected successfully!");
                     reconnectAttempts = 0;
                 });
@@ -91,7 +91,7 @@ const signalRService = (function () {
                 reconnectAttempts++;
                 const backoff = Math.min(reconnectAttempts * 2000, 10000);
 
-                console.log(`Reconnect attempt ${reconnectAttempts} in ${backoff / 1000} seconds.`);
+                //console.log(`Reconnect attempt ${reconnectAttempts} in ${backoff / 1000} seconds.`);
                 await new Promise(resolve => setTimeout(resolve, backoff)); // Wait for backoff delay
 
                 try {
@@ -117,9 +117,9 @@ const signalRService = (function () {
     const receive = (onEndPointName, callBack) => {
         if (connection && connection.state === signalR.HubConnectionState.Connected) {
             connection.off(onEndPointName);
-            // console.log(onEndPointName)
+            // //console.log(onEndPointName)
             connection.on(onEndPointName, (res) => {
-                // console.log("vnjn");
+                // //console.log("vnjn");
 
                 if (typeof callBack === "function") {
                     callBack(res);
@@ -138,7 +138,7 @@ const signalRService = (function () {
         if (connection) {
             connection.stop()
                 .then(() => {
-                    console.log("SignalR connection stopped.");
+                    //console.log("SignalR connection stopped.");
                     showToast("info", "Connection stopped.");
                 })
                 .catch((err) => {

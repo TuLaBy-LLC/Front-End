@@ -28,8 +28,6 @@ export default function ProfileCard({ token, t, i18n, profilePage = false }) {
         updateUser({ ...User, imageName: data?.user?.imageName });
       },
       onError: (err) => {
-        console.log(err);
-
         if (err.status == 401) {
           updateUser({}, true);
           navigate("/"); // Redirect to home

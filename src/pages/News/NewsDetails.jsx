@@ -71,7 +71,7 @@ const handleNewsAction = async (
     );
 
     // Log the response for debugging
-    console.log(response.data);
+    // console.log(response.data);
 
     // Update the state with the new like or view count
     setNews((prev) => ({
@@ -160,7 +160,7 @@ export default function NewsDetails() {
           };
           localData.push(newNewsAction);
           window.localStorage.setItem("newsItems", JSON.stringify(localData));
-          console.log("send View Update");
+          // console.log("send View Update");
 
           handleNewsAction(id, User.token, setNews, null, false);
         }

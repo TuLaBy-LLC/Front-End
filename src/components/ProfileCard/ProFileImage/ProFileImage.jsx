@@ -46,13 +46,13 @@ export default function ProFileImage({ User: { User, updateUser }, t }) {
       // Call the function to update the image by passing the form data
       updateImage(ApiUrl, User.token, formData)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
 
           if (res && res.imageName) {
             // Assuming res contains imageName (the uploaded image URL)
             updateUser({ ...User, imageName: res.imageName });
           } else {
-            console.log("Error:", res.message || "Failed to upload image.");
+            // console.log("Error:", res.message || "Failed to upload image.");
           }
           setIsLoading({ status: false, message: res.message });
         })

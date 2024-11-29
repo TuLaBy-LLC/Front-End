@@ -64,8 +64,6 @@ export default function NotificationsDropDown({ t, User }) {
       if (res != -1) {
         signalR.receive("ReceiveNotification", (notification) => {
           setNewNotification(true);
-          console.log("vnjn");
-
           setNotifications((prev) => [notification, ...prev]);
         });
       }
