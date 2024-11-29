@@ -8,7 +8,9 @@ import { Link } from "react-router-dom";
 
 export const ApiUrl_Public = `${
   import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY
-}${Apis.news.getAllNewsPublic}?pagination.pageSize=2&Navigations.EnablePublisher=true`;
+}${
+  Apis.news.getAllNewsPublic
+}?pagination.pageSize=2&Navigations.EnablePublisher=true`;
 const ApiUrl_Private = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.news.getAllNewsPrivate
 }?pagination.pageSize=2&Navigations.EnablePublisher=true`;
@@ -43,9 +45,15 @@ export default function News({ User, t, i18n }) {
     isLoading: isLoadingPublic,
     error: errorPublic,
     isError: isErrorPublic,
-  } = useQuery(`publicNews[${ApiUrl_Public}]`, () => getAllNewsAPI(ApiUrl_Public, t), {
-    staleTime: 60 * 60 * 60,
-  });
+  } = useQuery(
+    `publicNews[${ApiUrl_Public}]`,
+    () => getAllNewsAPI(ApiUrl_Public, t),
+    {
+      staleTime: 60 * 1000 ,
+      enabled: !privateDataLoaded, // Only fetch private data if privateDataLoaded is true
+
+    }
+  );
 
   // console.log(dtaPublic);
 
@@ -58,7 +66,7 @@ export default function News({ User, t, i18n }) {
     `PrivateNews[${ApiUrl_Public}]`,
     () => getAllNewsAPI(ApiUrl_Private, t, User?.token),
     {
-      staleTime: 60 * 60,
+      staleTime: 60 * 1000,
       enabled: privateDataLoaded, // Only fetch private data if privateDataLoaded is true
     }
   );
@@ -73,7 +81,7 @@ export default function News({ User, t, i18n }) {
           <div className="intro-news-tab p-3 pb-0 bg-white shadow-sm rounded-2">
             {/* Intro News Filter */}
             <div className="intro-news-filter d-flex justify-content-between align-items-center px-2">
-              <Link className="fs-4" to={`/news?type=${activeTab}`}>
+              <Link className="fs-4" to={`/news`}>
                 {t("news.header.all")}
               </Link>
               <nav className="w-75">

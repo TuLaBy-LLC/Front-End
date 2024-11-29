@@ -1,43 +1,13 @@
 import {
   IconAdjustmentsHorizontal,
   IconCirclesRelation,
-  IconFilter,
   IconSortAscending,
 } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form, Formik, Field } from "formik";
 import SortObject from "../SortObject/SortObject";
-import { useLocation } from "react-router-dom";
+import SearchField from "./SearchField/SearchField";
 
-const __initialValues = {
-  navigations: {
-    enablepublisher: "",
-    enableimages: "",
-  },
-  search: {
-    id: "",
-    title: "",
-    content: "",
-    publicationdate: "",
-    language: "",
-    category: "",
-    source: "",
-    tags: "",
-    views: "",
-    likes: "",
-    lastupdated: "",
-    publisherid: "",
-    publishername: "",
-    publishernamear: "",
-  },
-  sort: {
-    sorts: [],
-  },
-  pagination: {
-    pageindex: "",
-    pagesize: "",
-  },
-};
 const initialSortObj = {
   property: "id",
   ascending: true,
@@ -80,46 +50,45 @@ function objectToQueryString(obj, parentKey = "") {
 
   return queryStringParts.filter(Boolean).join("&");
 }
-export const queryStringToObject = (query) => {
-  const params = new URLSearchParams(query);
-  const result = { navigations: {
-    enablepublisher: "",
-    enableimages: "",
-  },
-  search: {
-    id: "",
-    title: "",
-    content: "",
-    publicationdate: "",
-    language: "",
-    category: "",
-    source: "",
-    tags: "",
-    views: "",
-    likes: "",
-    lastupdated: "",
-    publisherid: "",
-    publishername: "",
-    publishernamear: "",
-  },
-  sort: {
-    sorts: [],
-  },
-  pagination: {
-    pageindex: "",
-    pagesize: "",
-  },
+const deepCopy = (obj) => {
+  return JSON.parse(JSON.stringify(obj));
+};
+
+export const queryStringToObject = (query, originalProperties) => {
+  const Properties = deepCopy(originalProperties);
+  // Function to reset all values in an object to an empty string
+  const resetProperties = (structure) => {
+    const resetObject = {};
+    for (const key in structure) {
+      if (typeof structure[key] === "object" && structure[key] !== null) {
+        // Recursively reset nested objects
+        resetObject[key] = Array.isArray(structure[key])
+          ? []
+          : resetProperties(structure[key]);
+      } else {
+        // Set all values to an empty string
+        resetObject[key] = "";
+      }
+    }
+    return resetObject;
   };
-  // console.log(query);
+
+  // Reinitialize Properties dynamically with all values set to ""
+  Properties.navigations = resetProperties(Properties.navigations);
+  Properties.search = resetProperties(Properties.search);
+  Properties.sort = resetProperties(Properties.sort);
+  Properties.pagination = resetProperties(Properties.pagination);
+
+  const params = new URLSearchParams(query);
 
   for (const [key, value] of params.entries()) {
     const [mainKey, subKey] = key.split(".").map((k) => k.toLowerCase());
     // console.log([mainKey, subKey]);
 
     if (mainKey === "navigations") {
-      result.navigations[subKey] = value === "true"; // Convert to boolean
+      Properties.navigations[subKey] = value === "true"; // Convert to boolean
     } else if (mainKey === "search") {
-      result.search[subKey] = value;
+      Properties.search[subKey] = value;
     } else if (mainKey.startsWith("sort")) {
       // Handle array notation for Sort.sorts
       const match = key.match(/sort.sorts\[(\d+)\]\.(.*)/i);
@@ -128,35 +97,43 @@ export const queryStringToObject = (query) => {
         const index = parseInt(match[1]);
         const prop = match[2].toLowerCase();
 
-        if (!result.sort.sorts[index]) {
-          result.sort.sorts[index] = {};
+        if (!Properties.sort.sorts[index]) {
+          Properties.sort.sorts[index] = {};
         }
 
         if (prop === "ascending") {
-          result.sort.sorts[index][prop] = value === "true"; // Convert to boolean
+          Properties.sort.sorts[index][prop] = value === "true"; // Convert to boolean
         } else {
-          result.sort.sorts[index][prop] = value;
+          Properties.sort.sorts[index][prop] = value;
         }
       }
     } else if (mainKey === "pagination") {
-      result.pagination[subKey] = value;
+      Properties.pagination[subKey] = value;
     }
   }
-  // console.log(result);
+  // console.log(Properties);
 
-  return result;
+  return Properties;
 };
 
-export const AvailableSearchPropertiesToSortWith = {
-  id: "id",
-  title: "title",
-  content: "content",
-  publicationdate: "publication date",
-  views: "views",
-  likes: "likes",
-  lastupdated: "last updated",
+const reArrange = (obj) => {
+  const entries = Object.entries(obj);
+
+  const nonCheckboxEntries = entries.filter(([key, value]) => value !== "checkbox");
+  const checkboxEntries = entries.filter(([key, value]) => value === "checkbox");
+
+  // Combine non-checkbox entries first, followed by checkbox entries
+  return ([...nonCheckboxEntries, ...checkboxEntries]);
 };
-export default function FiltrationPanel({ t, setSpecs, initialValues }) {
+
+export default function FiltrationPanel({
+  t,
+  setSpecs,
+  initialValues,
+  SortProperties,
+  NavigationProperties,
+  SearchProperties,
+}) {
   const [filtrationTabs, setFiltrationTabs] = useState(0);
   const [sortTouched, setsortTouched] = useState(false);
   const [sorts, setSorts] = useState(
@@ -166,10 +143,10 @@ export default function FiltrationPanel({ t, setSpecs, initialValues }) {
 
   const handleSubmit = (values) => {
     document.querySelector("#modal-close-filterModal")?.click();
-    
+
     values.sort = { sorts };
     // console.log(sorts);
-    
+
     // console.log(values);
     setsortTouched(false);
     let query = objectToQueryString(values);
@@ -184,9 +161,7 @@ export default function FiltrationPanel({ t, setSpecs, initialValues }) {
     let availableProp = null;
 
     // Find all available properties
-    const availableProperties = Object.keys(
-      AvailableSearchPropertiesToSortWith
-    );
+    const availableProperties = Object.keys(SortProperties);
     // console.log(availableProperties, existingProperties);
 
     // Check if there are any properties left to add
@@ -216,6 +191,7 @@ export default function FiltrationPanel({ t, setSpecs, initialValues }) {
     });
     setsortTouched((prev) => true);
   };
+
   const handleSortChange = (index, propertyName, value) => {
     const existingProperties = sorts.map((sort) => sort.Property);
 
@@ -235,7 +211,9 @@ export default function FiltrationPanel({ t, setSpecs, initialValues }) {
     });
     setsortTouched((prev) => true);
   };
-  
+
+  // console.log(Object.entries(NavigationProperties));
+
   return (
     <>
       <div
@@ -318,184 +296,16 @@ export default function FiltrationPanel({ t, setSpecs, initialValues }) {
                               filtrationTabs !== 0 && "d-none"
                             }`}
                           >
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.id"
-                                id="search.id"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.id">
-                                {t("filtrationPanel.ID")}
-                              </label>
-                            </div>
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.title"
-                                id="search.title"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.title">
-                                {t("filtrationPanel.Title")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.content"
-                                id="search.content"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.content">
-                                {t("filtrationPanel.Content")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.publicationdate"
-                                id="search.publicationdate"
-                                type="date"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.publicationdate">
-                                {t("filtrationPanel.PublicationDate")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.publisherid"
-                                id="search.publisherid"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.publisherid">
-                                {t("filtrationPanel.PublisherID")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.publishername"
-                                id="search.publishername"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.publishername">
-                                {t("filtrationPanel.PublisherName")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.publishernamear"
-                                id="search.publishernamear"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.publishernamear">
-                                {t("filtrationPanel.PublisherNameAR")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                as="select"
-                                name="search.language"
-                                id="search.language"
-                                className="form-select"
-                                placeholder=" "
-                              >
-                                <option value="Arabic">
-                                  {t("filtrationPanel.Arabic")}
-                                </option>
-                                <option value="English">
-                                  {t("filtrationPanel.English")}
-                                </option>
-                              </Field>
-                              <label htmlFor="search.language">
-                                {t("filtrationPanel.Language")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.category"
-                                id="search.category"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.category">
-                                {t("filtrationPanel.Category")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.source"
-                                id="search.source"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.source">
-                                {t("filtrationPanel.Source")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.tags"
-                                id="search.tags"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.tags">
-                                {t("filtrationPanel.Tags")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.views"
-                                id="search.views"
-                                className="form-control"
-                                type="number"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.views">
-                                {t("filtrationPanel.Views")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.likes"
-                                id="search.likes"
-                                type="number"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.likes">
-                                {t("filtrationPanel.Likes")}
-                              </label>
-                            </div>
-
-                            <div className="col-6 form-floating">
-                              <Field
-                                name="search.lastupdated"
-                                id="search.lastupdated"
-                                type="date"
-                                className="form-control"
-                                placeholder=" "
-                              />
-                              <label htmlFor="search.lastupdated">
-                                {t("filtrationPanel.LastUpdated")}
-                              </label>
-                            </div>
+                            {reArrange(SearchProperties)?.map(
+                              ([key, type]) => (
+                                <SearchField
+                                  key={`search.${key}`}
+                                  FieldFor={`search.${key}`}
+                                  type={type}
+                                  label={t(`filtrationPanel.${key}`)}
+                                />
+                              )
+                            )}
 
                             <div className="mt-3 col-12 text-center">
                               <button
@@ -514,35 +324,17 @@ export default function FiltrationPanel({ t, setSpecs, initialValues }) {
                               filtrationTabs !== 1 && "d-none"
                             }`}
                           >
-                            <div className="col-6">
-                              <label
-                                className="me-2"
-                                htmlFor="navigations.enablepublisher"
-                              >
-                                {t("filtrationPanel.EnablePublisher")}
-                              </label>
-                              <Field
-                                name="navigations.enablepublisher"
-                                id="navigations.enablepublisher"
-                                type="checkbox"
-                                className="form-check-input"
-                              />
-                            </div>
-
-                            <div className="col-6">
-                              <label
-                                className="me-2"
-                                htmlFor="navigations.enableimages"
-                              >
-                                {t("filtrationPanel.EnableImages")}
-                              </label>
-                              <Field
-                                name="navigations.enableimages"
-                                id="navigations.enableimages"
-                                type="checkbox"
-                                className="form-check-input"
-                              />
-                            </div>
+                            {Object.entries(NavigationProperties)?.map(
+                              ([key, type]) => (
+                                <SearchField
+                                  key={`navigations.${key}`}
+                                  FieldFor={`navigations.${key}`}
+                                  type={"checkbox"}
+                                  className="form-check-input"
+                                  label={t(`filtrationPanel.${key}`)}
+                                />
+                              )
+                            )}
 
                             <div className="mt-3 col-12 text-center">
                               <button
@@ -571,11 +363,12 @@ export default function FiltrationPanel({ t, setSpecs, initialValues }) {
                                   Add Sort
                                 </button>
 
-                                <div className="row g-3">
+                                <div className="d-flex flex-column gap-3">
                                   {sorts.map((sort, index) => (
                                     <SortObject
                                       key={sort.property}
                                       {...sort}
+                                      SortProperties={SortProperties}
                                       index={index}
                                       handleChange={handleSortChange}
                                       removeSort={removeSort}

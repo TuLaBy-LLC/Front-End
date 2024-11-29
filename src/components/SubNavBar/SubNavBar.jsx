@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-export default function SubNavBar({t}) {
+export default function SubNavBar({ t }) {
   const { pathname } = useLocation("");
 
   const [activeLink, setActiveLink] = useState(pathname.slice(1));
@@ -15,9 +15,7 @@ export default function SubNavBar({t}) {
       {/* Main Menu */}
       <nav className="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div className="container-fluid">
-          <span className="navbar-brand fw-bolder">
-            {t("TuLaBy")}
-          </span>
+          <span className="navbar-brand fw-bolder">{t("TuLaBy")}</span>
           <button
             className="navbar-toggler"
             type="button"
@@ -70,6 +68,20 @@ export default function SubNavBar({t}) {
                   onClick={(_) => setActiveLink("attendance")}
                 >
                   {t("misc.Attendance")}
+                </Link>
+              </li>
+
+              <li
+                className={`nav-item hover-event ${
+                  activeLink === "notifications" && "active"
+                }`}
+              >
+                <Link
+                  className="nav-link"
+                  to="/notifications"
+                  onClick={(_) => setActiveLink("notifications")}
+                >
+                  {t("notifications.notifications")}
                 </Link>
               </li>
             </ul>

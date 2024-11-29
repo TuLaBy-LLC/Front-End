@@ -93,6 +93,6 @@ export default function SliderWithThumbnail({ news, title }) {
           ))}
         </div>
       </div>
-</div>
+    </div>
   );
 }

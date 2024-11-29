@@ -5,10 +5,12 @@
     "updateImage": "/api/Account/updateImage"
   },
   "auth": {
+    "notificationSettings":"/api/UsersNotificationsPreferences",
     "login": "/api/Account/login",
     "forgetPassword": "/api/ForgotPassword",
     "changePassword": "/api/Account/change-password"
   },
+
   "news": {
     "getAllNewsPublic": "/api/News/public",
     "getAllNewsPrivate": "/api/News/breaking",
@@ -41,5 +43,10 @@
   "getSessions": "/api/getAllSessionSubjects",
 
   "recordLectureAttend": "/api/LecturesAttendances/RecordAttendance",
-  "recordSessionAttend": "/api/SessionsAttendances/RecordAttendance"
+  "recordSessionAttend": "/api/SessionsAttendances/RecordAttendance",
+
+  "notifications":{
+    "notifications": "/api/notifications",
+    "notification": "/api/notifications/notification"
+  }
 }

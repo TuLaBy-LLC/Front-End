@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 export default function Error({
   statusCode = 400,
   message = "Bad Request",
@@ -5,11 +7,12 @@ export default function Error({
   errors = {},
 }) {
   const errorList = Object.keys(errors).flatMap((key) => errors[key]);
+  const { t } = useTranslation();
 
   return (
     <>
       {errorList.length === 0 ? (
-        <div className="alert alert-danger bg-transparent">{message=="Bad Request"?"Something went wrong, try again ..!":message}</div>
+        <div className="alert alert-danger bg-transparent">{message=="Bad Request"? t("errors.apiError"):message}</div>
       ) : (
         <div className="d-flex flex-column gap-3">
           {errorList.map((error, index) => (

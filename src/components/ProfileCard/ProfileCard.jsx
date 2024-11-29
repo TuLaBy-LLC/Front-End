@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IconMail } from "@tabler/icons-react";
-import axios from "axios";
 import Apis from "./../../Api.json";
 import { useQuery } from "react-query";
 import Error from "../Error/Error";
@@ -8,38 +7,33 @@ import LoadingComponent from "../loading/Loading";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContextProvider";
 import ProFileImage from "./ProFileImage/ProFileImage";
+import { InvokeAPI } from "../../Services/api";
 
 const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.profile.profile
 }`;
 
-export const getProfileData = async (api, token) => {
-  try {
-    const response = await axios.get(api, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    // console.log(response);
-
-    return response.data;
-  } catch ({ response: { data } }) {
-    throw data;
-  }
-};
-
 export default function ProfileCard({ token, t, i18n, profilePage = false }) {
   // console.log(token);
   const { User, updateUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const { data, isLoading, error, isError } = useQuery(
     `profileData:${token}`,
-    (_) => getProfileData(ApiUrl, token),
+    (_) => InvokeAPI(ApiUrl, token),
     {
       staleTime: 60 * 60 * 60,
+      retry: 2,
       onSuccess: (data) => {
         updateUser({ ...User, imageName: data?.user?.imageName });
+      },
+      onError: (err) => {
+        console.log(err);
+
+        if (err.status == 401) {
+          updateUser({}, true);
+          navigate("/"); // Redirect to home
+        }
       },
     }
   );
@@ -106,7 +100,10 @@ export default function ProfileCard({ token, t, i18n, profilePage = false }) {
               </div>
             )}
 
-            <p className="text-muted text-start mt-3 mb-0" style={{ fontSize: ".9rem" }}>
+            <p
+              className="text-muted text-start mt-3 mb-0"
+              style={{ fontSize: ".9rem" }}
+            >
               <span className="fw-bolder px-1 text-primary">{t("TuLaBy")}</span>
               {t("misc.speech")}
             </p>

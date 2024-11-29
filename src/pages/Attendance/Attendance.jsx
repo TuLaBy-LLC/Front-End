@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet";
-import SideBarComp from "../../components/SideBar/SideBar";
 import { useContext } from "react";
 import { SideBarContext } from "../../contexts/SideBarProvider";
 import { useEffect } from "react";
@@ -12,6 +11,7 @@ import LoadingComponent from "../../components/loading/Loading";
 import { useTranslation } from "react-i18next";
 import { convertDate } from "../../Helpers/Methods";
 import Error, { Warn } from "../../components/Error/Error";
+import { useNavigate } from "react-router-dom";
 
 const SchedulesApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.getSchedule
@@ -26,9 +26,9 @@ const getSchedules = async (url, token) => {
     // console.log(data);
 
     return data;
-  } catch ({ response: { data } }) {
+  } catch ({ response }) {
     // console.log(data);
-    throw data;
+    throw response;
   }
 };
 
@@ -37,15 +37,24 @@ const currentDate = new Date().toDateString();
 
 export default function Attendance() {
   const { sideBarOptions, setSideBarOptions } = useContext(SideBarContext);
-  const { User } = useContext(UserContext);
+  const { User,updateUser } = useContext(UserContext);
   const { t ,i18n} = useTranslation();
+  const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery("Schedule", (_) =>
     getSchedules(
       `${SchedulesApiUrl}?Navigations.EnableSessionsForStudent=true&Navigations.EnableLecturesForStudent=true&Search.Date=${currentDate}`,
       User?.token
     ),{
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      staleTime: 60 * 60 * 60,
+      retry: 2,
+      onError: (err) => {
+        if (err.status == 401) {
+          updateUser({}, true);
+          navigate("/"); // Redirect to home
+        }
+      }
     }
   );
 

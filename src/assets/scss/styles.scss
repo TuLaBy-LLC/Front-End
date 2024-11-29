@@ -21,6 +21,8 @@
 @import "./../../components/ProfileCard/ProfileCard.style.scss";
 @import "./../../components/CountDownTimer/CountDownTimer.style.scss";
 @import "./../../components/EventTable/EventTable.style.scss";
+@import "./../../components/NotificationDetailsModal/NotificationDetailsModal.style";
+@import "./../../components/NotificationsDropDown/NotificationsDropDown.style.scss";
 
 @import './../../components/News/SingleNews/SingleNews.style.scss';
 @import './../../components/News/NewsHeader/NewsHeader.style.scss';
@@ -41,3 +43,8 @@
 @import "./../../pages/Home/Home.style.scss";
 @import "./../../pages/Profile/Profile.style.scss";
 @import "./../../pages/News/News.style.scss";
+@import "./../../pages/Lecture/Lecture.style";
+@import "./../../pages/Session/Session.style";
+@import "./../../pages/Settings/Settings.style";
+@import "./../../pages/NotFound/NotFound.style";
+@import "./../../pages/Attendance/Attendance.style.scss";

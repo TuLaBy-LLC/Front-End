@@ -5,12 +5,12 @@ import LoadingComponent from "../../components/loading/Loading";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import EditProfile from "../../components/EditProfile/EditProfile";
-import ProfileCard, {
-  getProfileData,
-} from "../../components/ProfileCard/ProfileCard";
+import ProfileCard from "../../components/ProfileCard/ProfileCard";
 import UserContext from "../../contexts/UserContextProvider";
 import { useQuery } from "react-query";
 import Error from "../../components/Error/Error";
+import { Navigate } from "react-router-dom";
+import { InvokeAPI } from "../../Services/api";
 
 const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.profile.profile
@@ -23,11 +23,18 @@ export default function Profile() {
 
   const { data, isLoading, error, isError, refetch } = useQuery(
     `profileData:${User.token}`,
-    (_) => getProfileData(ApiUrl, User.token),
+    (_) => InvokeAPI(ApiUrl, User.token),
     {
       staleTime: 60 * 60 * 60,
+      retry: 2,
       onSuccess: (data) => {
         updateUser({ ...User, imageName: data.user.imageName });
+      },
+      onError: (err) => {
+        if (err.status == 401) {
+          updateUser({}, true);
+         
+        }
       },
     }
   );

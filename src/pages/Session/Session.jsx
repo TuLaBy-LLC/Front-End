@@ -9,7 +9,7 @@ import { useQuery } from "react-query";
 import UserContext from "../../contexts/UserContextProvider";
 import LoadingComponent from "../../components/loading/Loading";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CaptureAttendanceModal from "../../components/CaptureAttendanceModal/CaptureAttendanceModal";
 import EventTable from "../../components/EventTable/EventTable";
 
@@ -40,10 +40,11 @@ const currentDate = new Date().toDateString();
 
 export default function Session() {
   const { sideBarOptions, setSideBarOptions } = useContext(SideBarContext);
-  const { User } = useContext(UserContext);
+  const { User,updateUser } = useContext(UserContext);
   const { t, i18n } = useTranslation();
   const [showTable, setshowTable] = useState(false);
   const params = useParams();
+  const navigate = useNavigate();
 
   // console.log(params);
 
@@ -61,7 +62,15 @@ export default function Session() {
         `SubjectCode=${params?.code}&NearestDate=${currentDate}&Navigations.EnableInstructor=true&Navigations.EnablePlace=true`
       ),
     {
-      staleTime: 60 * 60 * 24,
+      staleTime: 60 * 60 * 24,  
+      retry: 2,
+      onError: (err) => {
+        if (err.status == 401) {
+          updateUser({}, true);
+          navigate("/"); // Redirect to home
+
+        }
+      }
     }
   );
   // console.log(dataSession);

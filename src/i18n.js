@@ -12,7 +12,16 @@ i18n
             en: {
                 translation: {
                     TuLaBy: "TuLaBy",
-
+                    notifications: {
+                        notifications: "Notifications",
+                        settings:"Notifications Settings",
+                        notification: "Notification",
+                        sendAt: "Send At",
+                        readAt: "Read At",
+                        notificationDetails: "Notification Details",
+                        viewAll: "View All",
+                        noMore: "No More Notifications",
+                    },
                     news: {
                         news: "News",
                         0: "No News Founded..!",
@@ -66,9 +75,11 @@ i18n
                         "Seconds": "Seconds",
                         "ok": "Ok",
                         "close": "Close",
-                        liveNow:"Live Now.!"
+                        liveNow: "Live Now.!"
                     },
                     security: {
+                        security:"Security",
+                        settings:"Security Settings",
                         Logout: "Logout",
                         Login: "Login",
                         "Enter code": "Enter code",
@@ -105,9 +116,9 @@ i18n
                         },
                         "Complete your profile": "Complete your profile",
                         "Edit Profile": "Edit Profile",
-                        "updateImage":"Update Image",
-                        "chooseImage":"Choose Image",
-                        "noImage":"No Image",
+                        "updateImage": "Update Image",
+                        "chooseImage": "Choose Image",
+                        "noImage": "No Image",
                         "edit-success": "Hello, Your Data Successfully Updated."
                     },
                     persons: {
@@ -129,33 +140,48 @@ i18n
                         subjects0: "You're not assigned to any subject..!"
                     },
                     filtrationPanel: {
-                        "filtration": "Filtration",
-                        "filter": "Filter",
-                        "ID": "ID",
-                        "Title": "Title",
-                        "Content": "Content",
-                        "PublisherID": "Publisher ID",
-                        "PublisherName": "Publisher Name",
-                        "PublisherNameAR": "Publisher Arabic Name",
-                        "Language": "Language",
-                        "Arabic": "Arabic",
-                        "English": "English",
-                        "Category": "Category",
-                        "Source": "Source",
-                        "Tags": "Tags",
-                        "Views": "Views",
-                        "Likes": "Likes",
-                        "LastUpdated": "Last Updated",
-                        "PublicationDate": "Publication Date",
-                        "BreakingNews": "Breaking News",
-                        "SortByProperty": "Sort By Property",
-                        "Ascending": "Ascending",
-                        "Priority": "Priority",
-                        "PageIndex": "Page Index",
-                        "PageSize": "Page Size",
-                        "EnablePublisher": "Add Publisher Data",
-                        "EnableImages": "Add Images",
-                    },
+                        filtration: "Filtration",
+                        filter: "Filter",
+                        id: "ID",
+                        title: "Title",
+                        content: "Content",
+                        publisherid: "Publisher ID",
+                        publishername: "Publisher Name",
+                        publishernamear: "Publisher Arabic Name",
+                        language: "Language",
+                        arabic: "Arabic",
+                        english: "English",
+                        category: "Category",
+                        source: "Source",
+                        tags: "Tags",
+                        views: "Views",
+                        likes: "Likes",
+                        lastupdated: "Last Updated",
+                        publicationdate: "Publication Date",
+                        breakingnews: "Breaking News",
+                        sortbyproperty: "Sort By Property",
+                        ascending: "Ascending",
+                        priority: "Priority",
+                        pageindex: "Page Index",
+                        pagesize: "Page Size",
+                        enablepublisher: "Add Publisher Data",
+                        enableimages: "Add Images",
+
+                        enableclub: "Enable Club",
+                        enablenotification: "Enable Notification",
+                        id: "ID",
+                        isread: "Is Read",
+                        isunread: "Is Unread",
+                        sendat: "Sent At",
+                        readat: "Read At",
+                        clubid: "Club ID",
+                        senderid: "Sender ID",
+                        notificationid: "Notification ID",
+                        notificationhead: "Notification Header",
+                        sendername: "Sender Name",
+                        sendernamear: "Sender Arabic Name",
+                    }
+                    ,
                     attendance: {
                         title: "Title",
                         startDate: "Start of the Week",
@@ -175,14 +201,26 @@ i18n
                         "enterCode": "Enter Code",
                         "code": "Code",
                         "captureQRCode": "Capture QR-Code",
-                        notInPlace:"You Are Not In Place To Take your Attendenace, Contact Your Leader."
+                        notInPlace: "You Are Not In Place To Take your Attendenace, Contact Your Leader."
                     },
+                    settings:{
+                        settings:"Settings..!"
+                    }
                 },
             },
             ar: {
                 translation: {
                     TuLaBy: "طُلابي",
-
+                    notifications: {
+                        settings: "إعدادات الإشعارات",
+                        notifications: "الإشعارات",
+                        notification: "إشعار",
+                        sendAt: "تاريخ الإرسال",
+                        readAt: "تاريخ القراءة",
+                        viewAll: "عرض الكل",
+                        noMore: "لا يوجد إشعارات أُخري",
+                        notificationDetails: "تفاصيل الإشعار"
+                    },
                     news: {
                         news: "ألاخبار",
                         wroteBy: "كٌتب بواسطة",
@@ -234,9 +272,11 @@ i18n
                         "Seconds": "ثانية",
                         "ok": "موافق",
                         "close": "إغلاق",
-                        liveNow:"!..شغاله الان"
+                        liveNow: "!..شغاله الان"
                     },
                     security: {
+                        security:"الأمن",
+                        settings:"إعدادات الأمن",
                         Logout: "تسجيل خروج",
                         Login: "تسجيل دخول",
                         "Enter code": "أدخل الكود",
@@ -273,9 +313,9 @@ i18n
                         },
                         "Complete your profile": "أكمل ملفك الشخصي",
                         "Edit Profile": "تعديل الملف الشخصي",
-                        "updateImage":"تعديل الصورة",
-                        "chooseImage":"اختر صورة",
-                        "noImage":"لا توجد صوره",
+                        "updateImage": "تعديل الصورة",
+                        "chooseImage": "اختر صورة",
+                        "noImage": "لا توجد صوره",
                         "edit-success": "مرحبا, بياناتك عُدلت بنجاح."
                     },
                     persons: {
@@ -297,32 +337,46 @@ i18n
                         subjects0: "!..لا توجد مواد مسجله لك"
                     },
                     filtrationPanel: {
-                        "filtration": "الفلتره",
-                        "filter": "فلتر",
-                        "ID": "معرف",
-                        "Title": "العنوان",
-                        "Content": "المحتوى",
-                        "PublisherID": "معرف الناشر",
-                        "PublisherName": "اسم الناشر",
-                        "PublisherNameAR": "اسم الناشر بالعربية",
-                        "Language": "اللغة",
-                        "Arabic": "عربي",
-                        "English": "إنجليزي",
-                        "Category": "الفئة",
-                        "Source": "المصدر",
-                        "Tags": "العلامات",
-                        "Views": "الآراء",
-                        "Likes": "الإعجابات",
-                        "LastUpdated": "آخر تحديث",
-                        "PublicationDate": "تاريخ النشر",
-                        "BreakingNews": "أخبار عاجلة",
-                        "SortByProperty": "فرز حسب الخاصية",
-                        "Ascending": "تصاعدي",
-                        "Priority": "الأولوية",
-                        "PageIndex": "رقم الصفحة",
-                        "PageSize": "حجم الصفحة",
-                        "EnablePublisher": "اضافة بيانات الناشر",
-                        "EnableImages": "اضافة الصور"
+                        filtration: "الفلتره",
+                        filter: "فلتر",
+                        id: "معرف",
+                        title: "العنوان",
+                        content: "المحتوى",
+                        publisherid: "معرف الناشر",
+                        publishername: "اسم الناشر",
+                        publishernamear: "اسم الناشر بالعربية",
+                        language: "اللغة",
+                        arabic: "عربي",
+                        english: "إنجليزي",
+                        category: "الفئة",
+                        source: "المصدر",
+                        tags: "العلامات",
+                        views: "الآراء",
+                        likes: "الإعجابات",
+                        lastupdated: "آخر تحديث",
+                        publicationdate: "تاريخ النشر",
+                        breakingnews: "أخبار عاجلة",
+                        sortbyproperty: "فرز حسب الخاصية",
+                        ascending: "تصاعدي",
+                        priority: "الأولوية",
+                        pageindex: "رقم الصفحة",
+                        pagesize: "حجم الصفحة",
+                        enablepublisher: "اضافة بيانات الناشر",
+                        enableimages: "اضافة الصور",
+
+                        enableclub: "تمكين النادي",
+                        enablenotification: "تمكين الإشعارات",
+                        id: "المعرف",
+                        isread: "تمت القراءة",
+                        isunread: "غير مقروء",
+                        sendat: "تاريخ الإرسال",
+                        readat: "تاريخ القراءة",
+                        clubid: "معرف النادي",
+                        senderid: "معرف المرسل",
+                        notificationid: "معرف الإشعار",
+                        notificationhead: "عنوان الإشعار",
+                        sendername: "اسم المستخدم",
+                        sendernamear: "اسم المستخدم (بالعربية)",
                     },
                     attendance: {
                         title: "العنوان",
@@ -334,7 +388,7 @@ i18n
                         "AM": "ص",
                         "PM": "م"
                     },
-                    "captureAttendance": {
+                    captureAttendance: {
                         "title": "التقاط رمز الاستجابة السريعة",
                         "scanNow": "مسح الآن",
                         "paused": "معلق",
@@ -343,7 +397,10 @@ i18n
                         "enterCode": "أدخل الرمز",
                         "code": "رمز",
                         "captureQRCode": "التقاط رمز الاستجابة السريعة",
-                        notInPlace:"!..أنت لست داخل المكان لأخذ حضورك, تواصل مع القائد"
+                        notInPlace: "!..أنت لست داخل المكان لأخذ حضورك, تواصل مع القائد"
+                    },
+                    settings:{
+                        settings:"!..الإعدادات"
                     }
                 },
             },

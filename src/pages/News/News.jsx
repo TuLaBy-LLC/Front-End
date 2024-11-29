@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import UserContext from "../../contexts/UserContextProvider";
 import { useState } from "react";
 import NewsHeader from "../../components/News/NewsHeader/NewsHeader";
@@ -8,12 +8,17 @@ import Apis from "./../../Api.json";
 import axios from "axios";
 import { useQuery } from "react-query";
 import LoadingComponent from "../../components/loading/Loading";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import NewsFeedSlider from "../../layout/News/NewsFeedSlider/NewsFeedSlider";
 import FiltrationPanel, {
   queryStringToObject,
 } from "../../components/FiltrationPanel/FiltrationPanel";
 import { IconFilter } from "@tabler/icons-react";
+import { GetPaginationValues } from "../../components/Pagination/Pagination";
+import {
+  handleQueryFormat,
+  setQueryStringInURL,
+} from "../../Helpers/helpersHandleQueries";
 
 export const ApiUrl_Public = `${
   import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY
@@ -22,8 +27,44 @@ const ApiUrl_Private = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.news.getAllNewsPrivate
 }`;
 
-const handleQueryFormat = (query) => {
-  return query[0] == "?" ? query : `?${query}`;
+const __NewsSpecificationsProperties = {
+  navigations: {
+    enablepublisher: "checkbox",
+    enableimages: "checkbox",
+  },
+  search: {
+    id: "string",
+    title: "string",
+    content: "string",
+    publicationdate: "datetime-local",
+    language: "string",
+    category: "string",
+    source: "string",
+    tags: "string",
+    views: "int",
+    likes: "int",
+    lastupdated: "datetime-local",
+    publisherid: "string",
+    publishername: "string",
+    publishernamear: "string",
+  },
+  sort: {
+    sorts: [],
+  },
+  pagination: {
+    pageindex: "int",
+    pagesize: "int",
+  },
+};
+
+const AvailableSearchPropertiesToSortWith = {
+  id: "id",
+  title: "title",
+  content: "content",
+  publicationdate: "publication date",
+  views: "views",
+  likes: "likes",
+  lastupdated: "last updated",
 };
 
 export const getAllNewsAPI = async (url, t = null, token = "") => {
@@ -36,26 +77,49 @@ export const getAllNewsAPI = async (url, t = null, token = "") => {
 
     // console.log(data);
     return data;
-  } catch (error) {
-    throw { message: t != null ? t("errors.apiError") : "Not Available..!" };
+  } catch ({ response }) {
+    throw response;
   }
 };
 
 export default function NewsFeed() {
   const { t, i18n } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const { User } = useContext(UserContext);
+  const { User, updateUser } = useContext(UserContext);
   const [activeTab, setActiveTab] = useState("latest");
   const [privateDataLoaded, setPrivateDataLoaded] = useState(false);
-  const [query, setQuery] = useState(location.search);
-  // console.log(query);
+  const [query, setQuery] = useState((_) => {
+    let q = location.search;
+    let first = q.length == 0;
+
+    if (!location.search.includes("navigations.enablePublisher")) {
+      q = `${q}${first ? "" : "&"}navigations.enablePublisher=true`;
+      first = false;
+    }
+    if (!location.search.includes("pagination.pagesize")) {
+      q = `${q}${first ? "" : "&"}pagination.pagesize=10`;
+      first = false;
+    }
+    if (!location.search.includes("pagination.pageindex")) {
+      q = `${q}${first ? "" : "&"}pagination.pageindex=1`;
+      first = false;
+    }
+
+    setQueryStringInURL(q, "news");
+
+    return q;
+  });
 
   const handelTabChange = (tabTitle) => {
     setActiveTab(tabTitle);
     if (tabTitle === "announcements" && !privateDataLoaded) {
       setPrivateDataLoaded(true);
-    }
+    } else setPrivateDataLoaded(false);
+    handleFiltration(
+      "navigations.enablePublisher=true&pagination.pagesize=10&pagination.pageindex=1"
+    );
   };
 
   const {
@@ -67,10 +131,15 @@ export default function NewsFeed() {
     `publicNews[${ApiUrl_Public}${handleQueryFormat(query)}]`,
     () => getAllNewsAPI(`${ApiUrl_Public}${handleQueryFormat(query)}`, t),
     {
-      staleTime: 60 * 60 * 60,
-      // onSuccess: (_) => {
-      //   console.log(_);
-      // },
+      staleTime: 60 * 60 * 1000,
+      enabled: !privateDataLoaded, // Only fetch private data if privateDataLoaded is true
+      retry: 2,
+      onError: (err) => {
+        if (err.status == 401) {
+          updateUser({}, true);
+          navigate("/"); // Redirect to home
+        }
+      },
     }
   );
 
@@ -88,22 +157,32 @@ export default function NewsFeed() {
         User?.token
       ),
     {
-      staleTime: 60 * 60,
+      staleTime: 60 * 60 * 1000,
       enabled: privateDataLoaded, // Only fetch private data if privateDataLoaded is true
+      retry: 2,
+      onError: (err) => {
+        // console.log(err);
+
+        if (err.status == 401) {
+          updateUser({}, true);
+          navigate("/"); // Redirect to home
+        }
+      },
     }
   );
 
   const handleFiltration = (query) => {
     setQuery(query);
-    // Edit the browser URL when the data is fetched successfully
-    const newUrl = `/news?${query}`;
-    window.history.replaceState(null, null, newUrl); // Updates the URL without navigating
   };
 
-useEffect(() => {
-  setQuery(location.search)
-  
-}, [location])
+  const handlePagination = (e) => {
+    e.preventDefault();
+
+    const updatedQueryString = GetPaginationValues(e.target, query);
+
+    setQuery(updatedQueryString);
+    setQueryStringInURL(updatedQueryString, "news");
+  };
 
   return (
     <>
@@ -205,8 +284,10 @@ useEffect(() => {
                     </div>
 
                     <NewsFeedSlider
+                      key={`${ApiUrl_Public}?${query}`}
                       headerMessage={"Latest News..."}
                       i18n={i18n}
+                      handlePagination={handlePagination}
                       t={t}
                       news={dtaPublic}
                     />
@@ -242,9 +323,11 @@ useEffect(() => {
                       </div>
 
                       <NewsFeedSlider
+                        key={`${ApiUrl_Private}?${query}`}
                         news={dtaPrivate}
                         headerMessage={"Announcements News..."}
                         i18n={i18n}
+                        handlePagination={handlePagination}
                         t={t}
                       />
                     </>
@@ -256,7 +339,13 @@ useEffect(() => {
 
           <FiltrationPanel
             t={t}
-            initialValues={queryStringToObject(query)}
+            initialValues={queryStringToObject(
+              query,
+              __NewsSpecificationsProperties
+            )}
+            NavigationProperties={__NewsSpecificationsProperties.navigations}
+            SearchProperties={__NewsSpecificationsProperties.search}
+            SortProperties={AvailableSearchPropertiesToSortWith}
             setSpecs={handleFiltration}
           />
         </>

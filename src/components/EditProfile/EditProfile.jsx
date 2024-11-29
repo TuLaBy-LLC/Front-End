@@ -48,11 +48,13 @@ const validationSchema = Yup.object({
     .matches(/^[0-9]+$/, "Phone number must be only digits")
     .min(10, "Phone number must be at least 10 digits"),
 
-  religion: Yup.number().oneOf([0, 1], "Invalid Religion").required(
-    "Religion is required"
-  ),
+  religion: Yup.number()
+    .oneOf([0, 1], "Invalid Religion")
+    .required("Religion is required"),
 
-  gender: Yup.number().oneOf([0, 1], "Invalid gender").required("Gender is required"),
+  gender: Yup.number()
+    .oneOf([0, 1], "Invalid gender")
+    .required("Gender is required"),
 
   birthDate: Yup.date()
     .required("Birthdate is required")
@@ -83,8 +85,6 @@ export default function EditProfile({
     updatedSuccess: false,
     errors: {},
   });
-
-  const [fileInputChanged, setFileInputChanged] = useState(false);
 
   const onSubmitHandler = async (values, { resetForm }) => {
     // console.log("Here");
@@ -135,10 +135,6 @@ export default function EditProfile({
     }
     resetForm({ values });
   };
-  // console.log(extractValues(EditData, userData.user));
-
-  // console.log(UserEdit);
-  
 
   return (
     <>
@@ -229,7 +225,7 @@ export default function EditProfile({
                       errors={UserEdit.errors.errors?.[`$.${EditData.email}`]}
                     />
                   </div>
-                  
+
                   <div className="col-sm-6 col-lg-4">
                     <div className="form-floating">
                       <Field
@@ -338,12 +334,7 @@ export default function EditProfile({
                     <div className="d-flex gap-2 justify-content-center">
                       <button
                         type="submit"
-                        disabled={
-                          !(
-                            formik.isValid &&
-                            (formik.dirty || fileInputChanged)
-                          )
-                        }
+                        disabled={!(formik.isValid && formik.dirty)}
                         className="btn btn-primary w-25"
                       >
                         {UserEdit.isLoading ? (
@@ -355,7 +346,6 @@ export default function EditProfile({
                           t("misc.save")
                         )}
                       </button>
-
                       <button
                         type="button"
                         data-bs-toggle="modal"

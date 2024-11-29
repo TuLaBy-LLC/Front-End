@@ -435,7 +435,7 @@ export default function NewsDetails() {
           </div>
           <div className="col-lg-4 mt-5 mt-lg-0 position-relative">
             <div className="row">
-              {User?.code && (
+              {User?.token && (
                 <div className="col-12 col-sm-9 col-md-6 col-lg-12 mt-4">
                   <ProfileCard t={t} i18n={i18n} {...User} />
                 </div>

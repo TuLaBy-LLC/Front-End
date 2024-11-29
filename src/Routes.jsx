@@ -11,6 +11,8 @@ import Session from "./pages/Session/Session";
 import NotFound from "./pages/NotFound/NotFound";
 import NewsDetails from "./pages/News/NewsDetails";
 import NewsFeed from "./pages/News/News";
+import Notifications from "./pages/Notifications/Notifications";
+import Settings from "./pages/Settings/Settings";
 
 const routes = createBrowserRouter([
   {
@@ -70,6 +72,22 @@ const routes = createBrowserRouter([
         element: (
           <PageGuard>
             <Session />
+          </PageGuard>
+        ),
+      },
+      {
+        path: "notifications",
+        element: (
+          <PageGuard>
+            <Notifications />
+          </PageGuard>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <PageGuard>
+            <Settings />
           </PageGuard>
         ),
       },

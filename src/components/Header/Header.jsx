@@ -12,11 +12,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SubNavBar from "../SubNavBar/SubNavBar";
 import { SideBarContext } from "../../contexts/SideBarProvider";
-import userImg from './../../assets/images/user-1.jpg'
+import userImg from "./../../assets/images/user-1.jpg";
+import NotificationsDropDown from "../NotificationsDropDown/NotificationsDropDown";
 
 export default function Header() {
   const { User, handleLogout } = useContext(UserContext);
-  const { sideBarOptions,setSideBarOptions } = useContext(SideBarContext);
+  const { sideBarOptions, setSideBarOptions } = useContext(SideBarContext);
 
   const { t, i18n } = useTranslation();
 
@@ -39,7 +40,7 @@ export default function Header() {
         <main className="top">
           <nav className="top navbar navbar-expand-lg navbar-light bg-white shadow-sm">
             <ul className="navbar-nav">
-              {sideBarOptions.enable  && (
+              {sideBarOptions.enable && (
                 <li className="nav-item">
                   <button
                     type="button"
@@ -57,10 +58,13 @@ export default function Header() {
               )}
 
               <li className="nav-item">
-                <a className="nav-link nav-icon-hover" href="">
+                {User.token && (
+                  <NotificationsDropDown User={User} t={t} />
+                )}
+                {/* <a className="nav-link nav-icon-hover" href="">
                   <IconBellRinging />
                   <div className="notification bg-primary rounded-circle"></div>
-                </a>
+                </a> */}
               </li>
             </ul>
 
@@ -113,7 +117,7 @@ export default function Header() {
                           <p className="mb-0 fs-3">{t("misc.My Profile")}</p>
                         </Link>
                         <Link
-                          to={`settings`}
+                          to={`/settings`}
                           className="d-flex align-items-center gap-2 dropdown-item"
                         >
                           <IconSettings />

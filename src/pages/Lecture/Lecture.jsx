@@ -10,7 +10,7 @@ import { useQuery } from "react-query";
 import UserContext from "../../contexts/UserContextProvider";
 import LoadingComponent from "../../components/loading/Loading";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CaptureAttendanceModal from "../../components/CaptureAttendanceModal/CaptureAttendanceModal";
 
 const ApiUrl_Lecture = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
@@ -28,10 +28,10 @@ export const getApi = async (token, api = ApiUrl_Lecture, query) => {
     });
     // console.log(response);
     return response.data;
-  } catch ({ response: { data } }) {
+  } catch ({ response }) {
     // console.log(data);
 
-    throw data;
+    throw response;
   }
 };
 
@@ -40,10 +40,11 @@ const currentDate = new Date().toDateString();
 
 export default function Lecture() {
   const { sideBarOptions, setSideBarOptions } = useContext(SideBarContext);
-  const { User } = useContext(UserContext);
+  const { User, updateUser } = useContext(UserContext);
   const { t, i18n } = useTranslation();
   const [showTable, setshowTable] = useState(false);
   const params = useParams();
+  const navigate = useNavigate();
 
   // console.log(params);
 
@@ -62,9 +63,16 @@ export default function Lecture() {
       ),
     {
       staleTime: 60 * 60 * 24,
+      retry: 2,
+      onError: (err) => {
+        if (err.status == 401) {
+          updateUser({}, true);
+          navigate("/"); // Redirect to home
+        }
+      },
     }
   );
-//  console.log(dataLecture);
+  //  console.log(dataLecture);
 
   const {
     data: dataLectureStatistics,

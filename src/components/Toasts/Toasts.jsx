@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import logo from './../../assets/images/logo-light_flat.png'
 
-export default function Toast_Default({message,statusIsSuccess = true,time=7000}) {
+export default function Toast_Default({setActivate, message,statusIsSuccess = true,time=7000}) {
   
   const [Status, setStatus] = useState(true);
   
   useEffect(() => {
     setTimeout(() => {
       setStatus(false);
+      setActivate({activate:false})
     }, time);
   }, [])
   

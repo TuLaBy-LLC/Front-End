@@ -1,25 +1,27 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import NewsHeader from "../../../components/News/NewsHeader/NewsHeader";
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
 import { useState } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
+import Pagination from "../../../components/Pagination/Pagination";
 
 export default function NewsFeedSlider({
   i18n,
   t,
-  news: { items },
+  news,
   headerMessage,
+  handlePagination,
 }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
   // Define the settings for the KeenSlider
   const [sliderRef, instanceRef] = useKeenSlider({
-    loop: true,
+    loop: false,
     slides: {
       perView: 4, // Default number of slides to show
-      spacing: 10, // Spacing between slides
+      spacing: 6, // Spacing between slides
     },
     slideChanged(slider) {
       setCurrentSlide(slider.track.details.rel);
@@ -69,15 +71,16 @@ export default function NewsFeedSlider({
             </button>
           </div>
         </div>
+        <Pagination handlePagination={handlePagination} {...news} />
 
         {/* Slider with ref */}
         <div ref={sliderRef} className="keen-slider py-2 bg-light">
-          {items.map((news) => (
-            <div key={news.id} className="keen-slider__slide px-1">
-              <NewsHeader t={t} i18n={i18n} {...news} />
+          {news.items.map((item) => (
+            <div key={item.id} className="keen-slider__slide px-1">
+              <NewsHeader t={t} i18n={i18n} {...item} />
             </div>
           ))}
-        </div>       
+        </div>
       </div>
     </>
   );

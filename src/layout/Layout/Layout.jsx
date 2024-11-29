@@ -4,9 +4,11 @@ import SideBarComp from "../../components/SideBar/SideBar";
 import { useContext, useState } from "react";
 import UserContext from "../../contexts/UserContextProvider";
 import { SideBarContext } from "../../contexts/SideBarProvider";
-
+import { NotificationContext } from "../../contexts/NotificationProvider";
+import NotificationDetailsModal from './../../components/NotificationDetailsModal/NotificationDetailsModal'
 export default function Layout() {
   const { User } = useContext(UserContext);
+  const Notification = useContext(NotificationContext);
   const { sideBarOptions } = useContext(SideBarContext);
 
   return (
@@ -21,13 +23,19 @@ export default function Layout() {
 
         <div
           className={`container${
-            User?.jwt_token ? "-fluid" : ""
-          } min-vh-100 bg-light py-4 position-relative`}
+            User?.token ? "-fluid" : ""
+          } bg-light py-4 position-relative`}
+          style={{
+            minHeight: "88vh",
+          }}
         >
           <Outlet />
         </div>
       </div>
       {/* Content */}
+
+      {/* Notification Pop Up */}
+      {User?.token && <NotificationDetailsModal {...Notification.activeModalData} />}
     </div>
   );
 }
