@@ -12,7 +12,10 @@ export default function EventTableRecord({
   professor = null,
   instructor = null,
 }) {
-  // console.log(lectureAttendances  );
+  // console.log({
+  //   lectureAttendances,
+  //   sessionAttendances,
+  // });
 
   const { name = "N/A", nameAR = "غير متاح" } =
     (isLecture ? professor : instructor) || {};
@@ -20,8 +23,8 @@ export default function EventTableRecord({
     (isLecture && lectureAttendances && lectureAttendances.length > 0
       ? lectureAttendances[0]
       : sessionAttendances && sessionAttendances.length > 0
-      ? sessionAttendances[0]
-      : {}) || {};
+        ? sessionAttendances[0]
+        : {}) || {};
 
   return (
     <tr data-code={code}>

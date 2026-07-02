@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserContext from "../../contexts/UserContextProvider";
-import axios from "axios";
 import Apis from "./../../Api.json";
 import LoadingComponent from "../../components/loading/Loading";
 import NotificationList from "../../components/NotificationList/NotificationList";
@@ -16,6 +15,7 @@ import { useQuery } from "react-query";
 import Error from "../../components/Error/Error";
 import Pagination, { GetPaginationValues } from "../../components/Pagination/Pagination";
 import { handleQueryFormat, setQueryStringInURL } from "../../Helpers/helpersHandleQueries";
+import { invokeAsync } from "../../Services/api";
 
 const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.notifications.notifications
@@ -54,19 +54,6 @@ const AvailableSearchPropertiesToSortWith = {
   readat: "Read At",
 };
 
-const getNotifications = async (url, token) => {
-  try {
-    const { data } = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return data;
-  } catch ({ response }) {
-    throw response;
-  }
-};
-
 export default function Notifications() {
   const [pageLoading, setPageLoading] = useState(true);
   const { t, i18n } = useTranslation();
@@ -94,7 +81,7 @@ export default function Notifications() {
 
   const { data, isLoading, error, isError, refetch } = useQuery(
     `notifications[${ApiUrl}${handleQueryFormat(query)}]`,
-    () => getNotifications(`${ApiUrl}${handleQueryFormat(query)}`, User.token),
+    () => invokeAsync("get",`${ApiUrl}${handleQueryFormat(query)}`, User.token),
     {
       staleTime: 60 * 1000,
       retry: 2,
@@ -137,7 +124,7 @@ export default function Notifications() {
       {pageLoading ? (
         <LoadingComponent active={pageLoading} />
       ) : isError ? (
-        <Error {...error} />
+        <Error {...error} t={t}i18n={i18n} />
       ) : (
         <>
           <section className="">

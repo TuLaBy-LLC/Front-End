@@ -2,7 +2,6 @@ import { Form, Formik } from "formik";
 import React from "react";
 import InputField from "../input-field/InputField";
 import { useState } from "react";
-import axios from "axios";
 import * as Yup from "yup";
 import Apis from "../../../Api.json";
 import { useTranslation } from "react-i18next";
@@ -24,9 +23,8 @@ const validationSchema = Yup.object({
   default_password: Yup.string().required("Default password is required"),
 });
 
-const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
-  Apis.auth.forgetPassword
-}`;
+const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${Apis.auth.forgetPassword
+  }`;
 
 export default function ForgetPasswordForm({
   unique = 1,
@@ -38,27 +36,39 @@ export default function ForgetPasswordForm({
   const onSubmitHandler = (values) => {
     setIsLoading(true);
     setAPiErrors(null);
-  
-    axios
-      .post(ApiUrl, {
+
+    invokeAsync(
+      "post",
+      ApiUrl,
+      "",
+      {
         code: values.code,
         default_password: values.default_password,
         new_password: values.new_password,
-      })
+      }
+    )
       .then((response) => {
-        if (response.status === 200) {
+
+        // invokeAsync returns response.data directly
+        if (response) {
           handleResetPasswordBtn();
         }
+
       })
-      .catch(({ response }) => {
-        setAPiErrors(response.data || { message: "An error occurred" });
+      .catch((error) => {
+        setAPiErrors(
+          error || {
+            message: "An error occurred"
+          }
+        );
+
         console.clear();
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
-  
+
   return (
     <Formik
       initialValues={initialValues}

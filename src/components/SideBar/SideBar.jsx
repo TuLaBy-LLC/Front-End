@@ -19,28 +19,15 @@ import {
 import logoLight from "./../../assets/images/logo-light.png";
 import UserContext from "../../contexts/UserContextProvider";
 import { SideBarContext } from "../../contexts/SideBarProvider";
-import axios from "axios";
+import { invokeAsync } from "../../Services/api";
 import { useQuery } from "react-query";
 import LoadingComponent from "../loading/Loading";
 import Apis from "../../Api.json";
 import { useTranslation } from "react-i18next";
 
-const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
-  Apis.getSubjects
-}`;
+const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${Apis.getSubjects
+  }`;
 
-const getSubjects = async (token) => {
-  try {
-    const response = await axios.get(ApiUrl, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch ({ response: { data } }) {
-    throw data;
-  }
-};
 
 const MenuMemo = React.memo(Menu);
 
@@ -53,14 +40,16 @@ const SideBarComp = () => {
 
   const { data, isLoading, isError, error } = useQuery(
     `subjects[${User?.token}]`,
-    () => getSubjects(User.token),
+    () => invokeAsync(
+      "get",
+      ApiUrl,
+      User.token
+    ),
     {
       staleTime: 60 * 60 * 60,
       refetchOnWindowFocus: false, // Prevent refetching data on window focus
     }
   );
-  // console.log({ data, isLoading, isError, error ,i18n});
-
   const handelLogoutBtn = () => {
     handleLogout();
     navigate("/");
@@ -139,7 +128,7 @@ const SideBarComp = () => {
         </MenuMemo>
       );
     }
-  }, [data, isLoading, isError, error, location.pathname,i18n.language]);
+  }, [data, isLoading, isError, error, location.pathname, i18n.language]);
 
   useEffect(() => {
     if (location.pathname.split("/")[1] != "attendance") {
@@ -240,7 +229,7 @@ const SideBarComp = () => {
             onClick={handelLogoutBtn}
             className="btn btn-outline-danger d-flex justify-content-center align-items-center mx-auto gap-3 w-75 py-2 fs-3"
           >
-            <span >LogOut</span>
+            {t("security.Logout")}
             <IconLogout size={20} />
           </button>
         </div>

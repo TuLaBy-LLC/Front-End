@@ -1,0 +1,33 @@
+.chats-sidebar {
+  width: 360px;
+  min-width: 360px;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.chats-sidebar.hide {
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chat-boxes {
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .chats-sidebar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: 1000;
+    height: 100%;
+    background: white;
+    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+  .chats-sidebar.hide {
+    -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+    width: 360px;
+  }
+}

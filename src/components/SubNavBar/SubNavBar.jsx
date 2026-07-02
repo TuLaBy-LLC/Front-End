@@ -84,6 +84,21 @@ export default function SubNavBar({ t }) {
                   {t("notifications.notifications")}
                 </Link>
               </li>
+
+              
+              <li
+                className={`nav-item hover-event ${
+                  activeLink === "chats" && "active"
+                }`}
+              >
+                <Link
+                  className="nav-link"
+                  to="/chats"
+                  onClick={(_) => setActiveLink("chats")}
+                >
+                  {t("chats.chats")}
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

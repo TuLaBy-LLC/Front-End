@@ -3,16 +3,16 @@ import Layout from "./layout/Layout/Layout";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import PageGuard from "./pages/PageGuard";
-import News from "./pages/News/News";
 import Attendance from "./pages/Attendance/Attendance";
 import PageLayout from "./layout/PageLayout/PageLayout";
 import Lecture from "./pages/Lecture/Lecture";
 import Session from "./pages/Session/Session";
 import NotFound from "./pages/NotFound/NotFound";
-import NewsDetails from "./pages/News/NewsDetails";
-import NewsFeed from "./pages/News/News";
 import Notifications from "./pages/Notifications/Notifications";
 import Settings from "./pages/Settings/Settings";
+import Chats from "./pages/Chats/Chats";
+import NewsFeed from "./pages/NewsFeed/NewsFeed";
+import NewsDetails from "./pages/NewsFeed/NewsDetails";
 
 const routes = createBrowserRouter([
   {
@@ -80,6 +80,14 @@ const routes = createBrowserRouter([
         element: (
           <PageGuard>
             <Notifications />
+          </PageGuard>
+        ),
+      },
+      {
+        path: "chats",
+        element: (
+          <PageGuard>
+            <Chats />
           </PageGuard>
         ),
       },

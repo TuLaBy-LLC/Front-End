@@ -5,11 +5,11 @@ import * as Yup from "yup";
 import { useState } from "react";
 import SelectCountriesElement from "../SelectCountriesElement/SelectCountriesElement";
 import { extractValues } from "../../Helpers/Methods";
-import axios from "axios";
 import Toast_Default from "../Toasts/Toasts";
 import { IconReplace, IconStatusChange } from "@tabler/icons-react";
 import ChangePasswordForm from "../Auth/ChangePasswordForm/ChangePasswordForm";
 import Error from "../Error/Error";
+import {invokeAsync} from "../../Services/api"
 
 const EditData = {
   name: "name",
@@ -38,11 +38,14 @@ const validationSchema = Yup.object({
     .email("Invalid email format")
     .required("Email is required"),
 
-  nationalId: Yup.string()
-    .required("National ID is required")
-    .matches(/^[0-9]+$/, "National ID must be only digits")
-    .min(14, "National ID must be at least 14 digits"),
-
+ nationalId: Yup.string()
+  .required("National ID is required")
+  .matches(
+    /^\d+(?:-\d+)?$/,
+    "National ID must contain only digits and optionally one hyphen"
+  )
+  .min(10, "National ID must be at least 10 characters"),
+  
   phoneNumber: Yup.string()
     .required("Phone number is required")
     .matches(/^[0-9]+$/, "Phone number must be only digits")
@@ -69,9 +72,8 @@ const validationSchema = Yup.object({
     .min(10, "Arabic biographical info must be at least 10 characters"),
 });
 
-const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
-  Apis.profile.editProfile
-}`;
+const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${Apis.profile.editProfile
+  }`;
 
 export default function EditProfile({
   t,
@@ -87,8 +89,9 @@ export default function EditProfile({
   });
 
   const onSubmitHandler = async (values, { resetForm }) => {
-    // console.log("Here");
 
+    // console.log({values,  resetForm });
+    
     setUserEdit((pr) => ({ ...pr, updatedSuccess: false, isLoading: true }));
 
     // values.religion = new Number(values.religion)
@@ -99,39 +102,38 @@ export default function EditProfile({
     });
 
     try {
-      const response = await axios.put(ApiUrl, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          // "Content-Type": "application/json",
-          "Content-Type": "multipart/form-data", // Important when sending files
-        },
-      });
-      // console.log(response);
+      const response = await invokeAsync(
+        "put",
+        ApiUrl,
+        token,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+// console.log(response);
 
-      if (response?.status === 200) {
-        // console.log(response);
-
-        setUserEdit((pr) => ({
+      if (response) {
+        setUserEdit(pr => ({
           ...pr,
           errors: {},
           updatedSuccess: true,
-          isLoading: false,
+          isLoading: false
         }));
+
         handleStudentData(true);
       }
+
     } catch (error) {
-      // console.log(error);
-
-      if (error.response) {
-        const responseData = error.response;
-        // console.log(responseData?.data?.errors);
-
-        setUserEdit((pr) => ({
-          ...pr,
-          isLoading: false,
-          errors: responseData?.data ?? {},
-        }));
-      }
+      console.log(error);
+      
+      setUserEdit(pr => ({
+        ...pr,
+        isLoading: false,
+        errors: error ?? {}
+      }));
     }
     resetForm({ values });
   };
@@ -163,11 +165,12 @@ export default function EditProfile({
                 className="container d-flex justify-content-center py-4"
                 encType="multipart/form-data"
               >
+                
                 <div className="row g-4">
                   {/* Render Api Errors */}
                   {UserEdit?.errors?.statusCode && (
                     <div className="col-12">
-                      <Error {...UserEdit.errors} />
+                      <Error {...UserEdit.errors}   t={t} i18n={i18n} />
                     </div>
                   )}
                   {/* Render Api Errors */}
@@ -360,8 +363,11 @@ export default function EditProfile({
                     </div>
                   </div>
                 </div>
+                
               </Form>
+              
             )}
+            
           </Formik>
         </div>
       </div>

@@ -9,31 +9,16 @@ import EventTable from "../../components/EventTable/EventTable";
 import { useQuery } from "react-query";
 import UserContext from "../../contexts/UserContextProvider";
 import LoadingComponent from "../../components/loading/Loading";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import CaptureAttendanceModal from "../../components/CaptureAttendanceModal/CaptureAttendanceModal";
+import { invokeAsync } from "../../Services/api";
+import { IconSchoolOff } from "@tabler/icons-react";
 
-const ApiUrl_Lecture = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
-  Apis.getNextLecture
-}`;
+const ApiUrl_Lecture = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${Apis.getNextLecture
+  }`;
 
-const ApiUrl_LectureStatistics = `${
-  import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY
-}${Apis.getLectureStatistics}`;
-
-export const getApi = async (token, api = ApiUrl_Lecture, query) => {
-  try {
-    const response = await axios.get(`${api}?${query}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    // console.log(response);
-    return response.data;
-  } catch ({ response }) {
-    // console.log(data);
-
-    throw response;
-  }
-};
+const ApiUrl_LectureStatistics = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY
+  }${Apis.getLectureStatistics}`;
 
 // Add months and format the updated date
 const currentDate = new Date().toDateString();
@@ -56,10 +41,9 @@ export default function Lecture() {
   } = useQuery(
     `Subject[${params?.code}][${User?.token}].Lecture`,
     () =>
-      getApi(
-        User.token,
-        ApiUrl_Lecture,
-        `SubjectCode=${params?.code}&NearestDate=${currentDate}&Navigations.EnableProfessor=true&Navigations.EnablePlace=true`
+      invokeAsync("get",
+        `${ApiUrl_Lecture}?SubjectCode=${params?.code}&NearestDate=${currentDate}&Navigations.EnableProfessor=true&Navigations.EnablePlace=true`,
+        User.token
       ),
     {
       staleTime: 60 * 60 * 24,
@@ -72,7 +56,7 @@ export default function Lecture() {
       },
     }
   );
-  //  console.log(dataLecture);
+  // console.log(dataLecture);
 
   const {
     data: dataLectureStatistics,
@@ -82,7 +66,7 @@ export default function Lecture() {
     refetch: lectureStatisticsRefetch,
   } = useQuery(
     `Subject[${params?.code}][${User?.token}].LectureStatistics`,
-    () => getApi(User.token, ApiUrl_LectureStatistics + `/${params?.code}`),
+    () => invokeAsync("get", ApiUrl_LectureStatistics + `/${params?.code}`, User.token),
     {
       staleTime: 60 * 60 * 24,
       enabled: false,
@@ -108,10 +92,37 @@ export default function Lecture() {
         <div className="row bg-white gy-4 rounded-1 shadow-sm pb-4">
           {lectureIsLoading ? (
             <LoadingComponent />
-          ) : dataLecture?.statusCode == 204 ? (
-            <div className="p-4">
-              <div className="alert bg-transparent alert-warning">
-                {t("errors.apiError")}
+          ) : dataLecture?.statusCode === 204 ? (
+            <div className="col-12">
+              <div className="d-flex justify-content-center align-items-center py-5">
+                <div
+                  className="bg-white shadow-sm rounded-4 p-5 text-center border"
+                  style={{ maxWidth: "500px", width: "100%" }}
+                >
+                  <div
+                    className="mx-auto mb-4 d-flex align-items-center justify-content-center rounded-circle bg-warning-subtle"
+                    style={{ width: "80px", height: "80px" }}
+                  >
+                    <IconSchoolOff
+                      size={40}
+                      className="text-warning"
+                    />
+                  </div>
+
+                  <h3 className="fw-bold mb-3">
+                    {t("lecture.empty.title")}
+                  </h3>
+
+                  <p className="text-muted fs-5 mb-0">
+                    {i18n.language === "en"
+                      ? dataLecture.message
+                      : dataLecture.messageAR || t("lecture.empty.description")}
+                  </p>
+
+                  <small className="text-secondary d-block mt-3">
+                    {t("lecture.empty.hint")}
+                  </small>
+                </div>
               </div>
             </div>
           ) : (

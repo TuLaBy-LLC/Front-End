@@ -1,17 +1,15 @@
 import { Helmet } from "react-helmet";
 import Apis from "../../Api.json";
-import { InvokeAPI } from "../../Services/api";
+import { invokeAsync } from "../../Services/api";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import LoadingComponent from "../loading/Loading";
 import Error from "../Error/Error";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 
-const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
-  Apis.auth.notificationSettings
-}`;
+const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${Apis.auth.notificationSettings
+  }`;
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -78,7 +76,7 @@ const NotificationSettingsForm = ({ data, handleSubmit, isSubmitting, t }) => (
           type="submit"
           className="btn btn-primary"
           disabled={!(formik.isValid && formik.dirty)}
-          onClick={(e) => {}}
+          onClick={(e) => { }}
         >
           {isSubmitting ? (
             <span
@@ -106,7 +104,7 @@ export default function NotificationSettings({
   // Fetch notification settings
   const { data, isLoading, error, isError, refetch } = useQuery(
     `NotificationSetting:${token}`,
-    () => InvokeAPI(ApiUrl, token),
+    () => invokeAsync(ApiUrl, token),
     {
       staleTime: 24 * 60 * 60 * 1000, // Cache for 24 hours
       retry: 2,
@@ -125,32 +123,35 @@ export default function NotificationSettings({
     }
   };
 
-  // Handle form submission
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (
+    values,
+    { setSubmitting }
+  ) => {
     try {
-      const response = await axios.put(
+      const response = await invokeAsync(
+        "put",
         ApiUrl,
+        token,
         {
           Id: data.id,
           userId: data.userId,
           SMSEnabled: values.smsEnabled,
           EmailEnabled: values.emailEnabled,
           InAppEnabled: values.inAppEnabled,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         }
       );
-      handleToast({ ...response.data });
+
+      handleToast({ ...response });
       RefetchSettings();
+
     } catch (err) {
-      if (err.response.status === 401) {
-        handleUnauthorized(err.response);
+
+      if (err.status === 401) {
+        handleUnauthorized(err);
       } else {
-        handleToast({ ...err.response.data });
+        handleToast({ ...err });
       }
+
     } finally {
       setSubmitting(false);
     }
@@ -167,7 +168,7 @@ export default function NotificationSettings({
           <LoadingComponent bgClass="bg-white" />
         </div>
       ) : isError ? (
-        <Error {...error} />
+        <Error {...error} t={t} i18n={{ language: "en" }} />
       ) : (
         <NotificationSettingsForm
           data={data}

@@ -61,15 +61,15 @@ export default function Schedule({ schedule, i18n, t }) {
 
   // Predefined time slots for the schedule
   const timeSlots = [
-    { start: "08:30", end: "10:00" },
-    { start: "10:00", end: "11:30" },
-    { start: "11:30", end: "13:00" },
-    { start: "13:00", end: "14:30" },
-    { start: "14:30", end: "16:00" },
-    { start: "16:00", end: "17:30" },
-    { start: "17:30", end: "19:00" },
-    { start: "19:00", end: "20:30" },
-    { start: "20:30", end: "22:00" },
+    { start: "09:00", end: "10:30" },
+    { start: "10:30", end: "12:00" },
+    { start: "12:00", end: "13:30" },
+    { start: "13:30", end: "15:00" },
+    { start: "15:00", end: "16:30" },
+    { start: "16:30", end: "18:00" },
+    { start: "18:00", end: "19:30" },
+    { start: "19:30", end: "21:00" },
+    { start: "21:00", end: "22:30" },
   ];
 
   // Combine and sort events (lectures and sessions) by start time
@@ -89,7 +89,7 @@ export default function Schedule({ schedule, i18n, t }) {
   // Renders each event into buttons inside the table
   const renderEvents = (events, key) => {
     // console.log(events);
-    
+
     return events.map((event, index) => (
       <div
         key={index}
@@ -109,16 +109,11 @@ export default function Schedule({ schedule, i18n, t }) {
           {i18n.language === "en" ? event.title : event.titleAR}
         </button>
         {/* Modal for displaying event details */}
-        {useMemo(
-          () => (
-            <ScheduleModal
-              event={event}
-              id={`${event.code}`}
-              language={i18n.language}
-            />
-          ),
-          [event, i18n.language]
-        )}
+        <ScheduleModal
+          event={event}
+          id={`${event.code}`}
+          language={i18n.language}
+        />
       </div>
     ));
   };
@@ -141,7 +136,7 @@ export default function Schedule({ schedule, i18n, t }) {
 
       // Render N/A if no events, otherwise render the events
       if (dayEvents.length === 0) {
-        return <td key={i}>N/A</td>;
+        return <td key={i}>-</td>;
       } else {
         return <td key={i}>{renderEvents(dayEvents, i)}</td>;
       }

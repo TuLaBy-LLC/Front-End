@@ -30,7 +30,7 @@ export default function EventCard({
       <div className="card-body pb-3">
         <h5 className="card-title fw-normal fs-5">
           {`${t(
-            `persons.${(type = "lecture" ? "professor" : "instructor")}`
+            `persons.${(type == "lecture" ? "professor" : "instructor")}`
           )} : `}
           <span className="fw-bold" title={lang == "en" ? name : nameAR}>
             {lang == "en" ? name : nameAR}

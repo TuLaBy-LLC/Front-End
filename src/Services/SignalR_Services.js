@@ -1,167 +1,334 @@
-import * as signalR from "@microsoft/signalr"
+// services/signalRService.js
 
-// Toast configuration using SweetAlert2
-// const Toast = Swal.mixin({
-//     toast: true,
-//     position: "bottom-end",
-//     showConfirmButton: false,
-//     timer: 3000,
-//     timerProgressBar: true,
-//     didOpen: (toast) => {
-//         toast.onmouseenter = Swal.stopTimer;
-//         toast.onmouseleave = Swal.resumeTimer;
-//     }
-// });
+import * as signalR from "@microsoft/signalr";
 
-// SignalR Service Module
-const signalRService = (function () {
-    let connection = null;
-    let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5;
+const signalRService = (() => {
 
     /**
-     * Displays a toast notification.
-     * @param {string} icon - The icon type (success, error, info, warning).
-     * @param {string} title - The message to display.
+     * Stores active connections by hub name.
+     * Example:
+     * {
+     *   chat: HubConnection,
+     *   notification: HubConnection
+     * }
      */
+    const connections = {};
+
+    /**
+     * Prevents multiple simultaneous start calls
+     * for the same hub.
+     */
+    const connectionPromises = {};
+
     const showToast = (icon, title) => {
+        // Integrate your toast library here if needed
         // Toast.fire({ icon, title });
-        //console.log({ icon, title });
+
+        // console.log(`[${icon}] ${title}`);
     };
 
     /**
- * Starts the SignalR connection.
- * @param {string} hub - The SignalR hub URL.
- * @returns {Promise<void>} Resolves when the connection is established or rejects if an error occurs.
- */
-    const startConnection = async function (hub = "/notificationsHub",id="", token = "") {
-        // If already connected, resolve immediately
-        if (connection && connection.state === signalR.HubConnectionState.Connected) {
-            return Promise.resolve(-1);
+     * Start a hub connection.
+     *
+     * @param {string} hubName
+     * @param {string} hubUrl
+     * @param {string} userId
+     * @param {string} token
+     *
+     * @returns {Promise<HubConnection>}
+     */
+    const start = async (
+        hubName,
+        hubUrl,
+        userId,
+        token
+    ) => {
+
+        const existingConnection =
+            connections[hubName];
+
+        // Already connected
+        if (
+            existingConnection &&
+            existingConnection.state ===
+            signalR.HubConnectionState.Connected
+        ) {
+            return existingConnection;
         }
 
-        // Build the connection
-        connection = new signalR.HubConnectionBuilder()
-            .withUrl(`${hub}?userId=${id}&token=${token}`,{
-                transport: signalR.HttpTransportType.WebSockets
-            })
-            .build();
+        // Connection is already starting
+        if (connectionPromises[hubName]) {
+            return connectionPromises[hubName];
+        }
 
-        // Start the connection and handle lifecycle events
-        return connection.start()
+        // Create connection only once
+        if (!existingConnection) {
+
+            const connection =
+                new signalR.HubConnectionBuilder()
+                    .withUrl(
+                        `${hubUrl}?userId=${userId}&token=${token}`,
+                        {
+                            transport:
+                                signalR.HttpTransportType.WebSockets
+                        }
+                    )
+                    .withAutomaticReconnect([
+                        0,
+                        2000,
+                        5000,
+                        10000,
+                        30000
+                    ])
+                    .build();
+
+
+            // Register lifecycle events
+
+            connection.onreconnecting(error => {
+
+                // console.warn(
+                //     `${hubName} reconnecting`,
+                //     error
+                // );
+
+                showToast(
+                    "info",
+                    `${hubName} reconnecting...`
+                );
+            });
+
+            connection.onreconnected(connectionId => {
+
+                // console.info(
+                //     `${hubName} reconnected`,
+                //     connectionId
+                // );
+
+                showToast(
+                    "success",
+                    `${hubName} reconnected`
+                );
+            });
+
+            connection.onclose(error => {
+
+                // console.warn(
+                //     `${hubName} disconnected`,
+                //     error
+                // );
+
+                showToast(
+                    "warning",
+                    `${hubName} disconnected`
+                );
+            });
+
+            connections[hubName] = connection;
+        }
+
+        const connection = connections[hubName];
+
+        connectionPromises[hubName] = connection
+            .start()
             .then(() => {
-                showToast("success", "Connected to the server.");
-                reconnectAttempts = 0;
 
-                // Define event handlers only once
-                connection.on("ReceiveNotification", (data) => {
-                    //console.log("Received notification:", data);
-                });
+                // console.info(
+                //     `${hubName} connected`
+                // );
 
-                connection.onclose((err) => {
-                    console.error("SignalR connection closed. Attempting to reconnect...", err?.message);
-                    showToast("warning", "Connection lost. Trying to reconnect...");
-                    handleReconnect();
-                });
+                showToast(
+                    "success",
+                    `${hubName} connected`
+                );
 
-                connection.onreconnecting(() => {
-                    //console.log("Reconnecting SignalR...");
-                    showToast("info", "Reconnecting to the server...");
-                });
-
-                connection.onreconnected(() => {
-                    //console.log("SignalR reconnected successfully!");
-                    showToast("success", "Reconnected successfully!");
-                    reconnectAttempts = 0;
-                });
+                return connection;
             })
-            .catch((err) => {
-                console.error("Error starting connection:", err.message);
-                throw new Error("Unable to start connection");
+            .catch(error => {
+
+                // console.error(
+                //     `Error connecting to ${hubName}`,
+                //     error
+                // );
+
+                delete connections[hubName];
+
+                throw error;
+            })
+            .finally(() => {
+                delete connectionPromises[hubName];
             });
+
+        return connectionPromises[hubName];
     };
 
     /**
-     * Handles automatic reconnection attempts.
-     * @returns {Promise<void>} Resolves if reconnection succeeds or rejects after max attempts.
+     * Subscribe to server event.
+     *
+     * Returns unsubscribe function.
      */
-    const handleReconnect = function () {
-        return new Promise(async (resolve, reject) => {
-            if (reconnectAttempts < maxReconnectAttempts) {
-                reconnectAttempts++;
-                const backoff = Math.min(reconnectAttempts * 2000, 10000);
+    const receive = (
+        hubName,
+        eventName,
+        callback
+    ) => {
 
-                //console.log(`Reconnect attempt ${reconnectAttempts} in ${backoff / 1000} seconds.`);
-                await new Promise(resolve => setTimeout(resolve, backoff)); // Wait for backoff delay
+        const connection =
+            connections[hubName];
 
-                try {
-                    await startConnection();
-                    resolve(); // Resolve if connection is successful
-                } catch (err) {
-                    console.error(`Reconnect attempt ${reconnectAttempts} failed:`, err.message);
-                    handleReconnect().then(resolve).catch(reject); // Retry recursively
-                }
-            } else {
-                console.error("Max reconnect attempts reached. Connection failed.");
-                showToast("error", "Max reconnect attempts reached. Please check your connection.");
-                reject(new Error("Max reconnect attempts reached."));
-            }
+        if (!connection) {
+
+            // console.warn(
+            //     `${hubName} connection not found`
+            // );
+
+            return () => { };
+        }
+
+     
+
+        connection.on(eventName, (...a) => {
+            
+            callback(a)
         });
+      
+        return () => {
+            connection.off(eventName, callback);
+        };
     };
 
     /**
-     * Registers a callback for a specific SignalR event.
-     * @param {string} onEndPointName - The SignalR event name.
-     * @param {function} callBack - The callback function to handle the event.
+     * Invoke hub method and wait for response.
      */
-    const receive = (onEndPointName, callBack) => {
-        if (connection && connection.state === signalR.HubConnectionState.Connected) {
-            connection.off(onEndPointName);
-            // //console.log(onEndPointName)
-            connection.on(onEndPointName, (res) => {
-                // //console.log("vnjn");
+    const invoke = async (
+        hubName,
+        methodName,
+        ...args
+    ) => {
 
-                if (typeof callBack === "function") {
-                    callBack(res);
-                } else {
-                    console.warn("No valid callback function provided.");
-                }
-            });
+        const connection =
+            connections[hubName];
+
+        if (
+            !connection ||
+            connection.state !==
+            signalR.HubConnectionState.Connected
+        ) {
+            throw new Error(
+                `${hubName} is not connected`
+            );
+        }
+
+        return await connection.invoke(
+            methodName,
+            ...args
+        );
+    };
+
+    /**
+     * Send hub method without waiting for response.
+     */
+    const send = async (
+        hubName,
+        methodName,
+        ...args
+    ) => {
+
+        const connection =
+            connections[hubName];
+
+        if (
+            !connection ||
+            connection.state !==
+            signalR.HubConnectionState.Connected
+        ) {
+            throw new Error(
+                `${hubName} is not connected`
+            );
+        }
+
+        return await connection.send(
+            methodName,
+            ...args
+        );
+    };
+
+    /**
+     * Stop one connection.
+     */
+    const stop = async (hubName) => {
+        // console.log("STOP CALLED:", hubName);
+        // console.trace();
+
+        const connection =
+            connections[hubName];
+
+        if (!connection)
+            return;
+
+        try {
+
+            await connection.stop();
+
+            delete connections[hubName];
+            delete connectionPromises[hubName];
+
+            showToast(
+                "info",
+                `${hubName} stopped`
+            );
+
+        } catch (error) {
+
+            // console.error(
+            //     `Error stopping ${hubName}`,
+            //     error
+            // );
         }
     };
 
     /**
-     * Stops the SignalR connection.
+     * Stop all connections.
      */
-    const stopConnection = function () {
+    const stopAll = async () => {
 
-        if (connection) {
-            connection.stop()
-                .then(() => {
-                    //console.log("SignalR connection stopped.");
-                    showToast("info", "Connection stopped.");
-                })
-                .catch((err) => {
-                    console.error("Error stopping SignalR:", err.message, err.stack);
-                });
+        const hubNames =
+            Object.keys(connections);
+
+        for (const hubName of hubNames) {
+            await stop(hubName);
         }
     };
 
     /**
-     * Checks if the SignalR connection is active.
-     * @returns {boolean} - True if connected, otherwise false.
+     * Check connection state.
      */
-    const isConnected = function () {
-        return connection && connection.state === signalR.HubConnectionState.Connected;
+    const isConnected = (hubName) => {
+
+        return (
+            connections[hubName]?.state ===
+            signalR.HubConnectionState.Connected
+        );
     };
 
-    // Expose public methods
+    /**
+     * Get raw HubConnection.
+     */
+    const getConnection = (hubName) => {
+        return connections[hubName] ?? null;
+    };
+
     return {
-        start: startConnection,
+        start,
         receive,
-        stop: stopConnection,
-        isConnected: isConnected,
+        invoke,
+        send,
+        stop,
+        stopAll,
+        isConnected,
+        getConnection
     };
+
 })();
 
-export default signalRService
+export default signalRService;

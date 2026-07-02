@@ -1,71 +1,83 @@
 import React, { useState } from "react";
 import Apis from "./../../../Api.json";
-import axios from "axios";
 import Toast_Default from "../../Toasts/Toasts";
+import { invokeAsync } from "../../../Services/api"; // adjust path if needed
 
 const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.profile.updateImage
 }`;
 
-const updateImage = async (api, token, data) => {
-  try {
-    const response = await axios.put(api, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch ({ response: { data } }) {
-    throw data;
-  }
-};
-
-export default function ProFileImage({ User: { User, updateUser }, t }) {
+export default function ProFileImage({
+  User: { User, updateUser },
+  t,
+}) {
   // State to hold the selected file and image preview
   const [selectedImage, setSelectedImage] = useState(null);
-  const [isLoading, setIsLoading] = useState({ status: false, message: "" });
-  const [imagePreview, setImagePreview] = useState(User?.imageName || ""); // Assuming `User.image` holds the current profile image URL
+  const [isLoading, setIsLoading] = useState({
+    status: false,
+    message: "",
+  });
+  const [imagePreview, setImagePreview] = useState(
+    User?.imageName || ""
+  ); // Assuming `User.image` holds the current profile image URL
 
   // Handle image selection
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       setSelectedImage(file);
       setImagePreview(URL.createObjectURL(file)); // Create a URL for the image preview
     }
   };
 
-  // Handle image upload (placeholder for future implementation)
+  // Handle image upload
   const handleUpload = () => {
     if (selectedImage) {
-      // Create FormData object and append the selected image
-      setIsLoading({ status: true, message: "" });
+      setIsLoading({
+        status: true,
+        message: "",
+      });
+
       const formData = new FormData();
       formData.append("image", selectedImage);
 
-      // Call the function to update the image by passing the form data
-      updateImage(ApiUrl, User.token, formData)
+      invokeAsync(
+        "put",
+        ApiUrl,
+        User.token,
+        formData
+      )
         .then((res) => {
-          // console.log(res);
-
           if (res && res.imageName) {
             // Assuming res contains imageName (the uploaded image URL)
-            updateUser({ ...User, imageName: res.imageName });
-          } else {
-            // console.log("Error:", res.message || "Failed to upload image.");
+            updateUser({
+              ...User,
+              imageName: res.imageName,
+            });
           }
-          setIsLoading({ status: false, message: res.message });
+
+          setIsLoading({
+            status: false,
+            message: res.message,
+          });
         })
         .catch((err) => {
           console.error("Upload failed:", err);
-          setIsLoading({ status: false, message: err.message });
+
+          setIsLoading({
+            status: false,
+            message: err.message,
+          });
         });
     }
   };
 
   return (
     <>
-      {isLoading.message != "" && <Toast_Default message={isLoading.message} />}
+      {isLoading.message !== "" && (
+        <Toast_Default message={isLoading.message} />
+      )}
 
       <button
         type="button"
@@ -86,9 +98,13 @@ export default function ProFileImage({ User: { User, updateUser }, t }) {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="UpdateImageLabel">
+              <h1
+                className="modal-title fs-5"
+                id="UpdateImageLabel"
+              >
                 {t("profile.updateImage")}
               </h1>
+
               <button
                 type="button"
                 className="btn-close"
@@ -96,6 +112,7 @@ export default function ProFileImage({ User: { User, updateUser }, t }) {
                 aria-label="Close"
               ></button>
             </div>
+
             <div className="modal-body">
               {/* Image preview */}
               <div className="mb-3 text-center">
@@ -109,7 +126,9 @@ export default function ProFileImage({ User: { User, updateUser }, t }) {
                   </div>
                 ) : (
                   <div className="image-placeholder">
-                    <span className="text-muted">{t("profile.noImage")}</span>
+                    <span className="text-muted">
+                      {t("profile.noImage")}
+                    </span>
                   </div>
                 )}
               </div>
@@ -122,6 +141,7 @@ export default function ProFileImage({ User: { User, updateUser }, t }) {
                 >
                   {t("profile.chooseImage")}
                 </label>
+
                 <input
                   className="form-control d-none"
                   type="file"
@@ -131,6 +151,7 @@ export default function ProFileImage({ User: { User, updateUser }, t }) {
                 />
               </div>
             </div>
+
             <div className="modal-footer">
               <button
                 type="button"
@@ -139,6 +160,7 @@ export default function ProFileImage({ User: { User, updateUser }, t }) {
               >
                 {t("misc.close")}
               </button>
+
               <button
                 type="button"
                 className="btn btn-primary"

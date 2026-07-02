@@ -4,8 +4,7 @@ import { useContext } from "react";
 import UserContext from "../../contexts/UserContextProvider";
 import { useState } from "react";
 import NewsHeader from "../../components/News/NewsHeader/NewsHeader";
-import Apis from "./../../Api.json";
-import axios from "axios";
+import Apis from "../../Api.json";
 import { useQuery } from "react-query";
 import LoadingComponent from "../../components/loading/Loading";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -19,13 +18,12 @@ import {
   handleQueryFormat,
   setQueryStringInURL,
 } from "../../Helpers/helpersHandleQueries";
+import { getAllNewsAPI } from "../../layout/News/News";
 
-export const ApiUrl_Public = `${
-  import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY
-}${Apis.news.getAllNewsPublic}`;
-const ApiUrl_Private = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
-  Apis.news.getAllNewsPrivate
-}`;
+export const ApiUrl_Public = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY
+  }${Apis.news.getAllNewsPublic}`;
+const ApiUrl_Private = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${Apis.news.getAllNewsPrivate
+  }`;
 
 const __NewsSpecificationsProperties = {
   navigations: {
@@ -67,29 +65,15 @@ const AvailableSearchPropertiesToSortWith = {
   lastupdated: "last updated",
 };
 
-export const getAllNewsAPI = async (url, t = null, token = "") => {
-  try {
-    const { data } = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    // console.log(data);
-    return data;
-  } catch ({ response }) {
-    throw response;
-  }
-};
 
 export default function NewsFeed() {
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-
   const { User, updateUser } = useContext(UserContext);
   const [activeTab, setActiveTab] = useState("latest");
   const [privateDataLoaded, setPrivateDataLoaded] = useState(false);
+
   const [query, setQuery] = useState((_) => {
     let q = location.search;
     let first = q.length == 0;
@@ -129,9 +113,9 @@ export default function NewsFeed() {
     isError: isErrorPublic,
   } = useQuery(
     `publicNews[${ApiUrl_Public}${handleQueryFormat(query)}]`,
-    () => getAllNewsAPI(`${ApiUrl_Public}${handleQueryFormat(query)}`, t),
+    () => getAllNewsAPI(`${ApiUrl_Public}${handleQueryFormat(query)}`, t, User?.token),
     {
-      staleTime: 60 * 60 * 1000,
+      // staleTime: 60 * 60 * 1000,
       enabled: !privateDataLoaded, // Only fetch private data if privateDataLoaded is true
       retry: 2,
       onError: (err) => {
@@ -210,9 +194,8 @@ export default function NewsFeed() {
                 >
                   <button
                     type="button"
-                    className={`nav-item nav-link mw-fit-content p-2 py-1 ${
-                      activeTab === "latest" && "active"
-                    }`}
+                    className={`nav-item nav-link mw-fit-content p-2 py-1 ${activeTab === "latest" && "active"
+                      }`}
                     id="latest"
                     title={t("news.header.Latest")}
                     data-toggle="tab"
@@ -229,9 +212,8 @@ export default function NewsFeed() {
                   {User.token && (
                     <button
                       type="button"
-                      className={`nav-item nav-link mw-fit-content p-2 py-1 overflow-hidden ${
-                        activeTab === "announcements" && "active"
-                      }`}
+                      className={`nav-item nav-link mw-fit-content p-2 py-1 overflow-hidden ${activeTab === "announcements" && "active"
+                        }`}
                       id="announcements"
                       title={t("news.header.Announcements")}
                       data-toggle="tab"
@@ -258,9 +240,8 @@ export default function NewsFeed() {
             </div>
             <div className="tab-content py-3 px-2" id="nav-tabContent">
               <div
-                className={`tab-pane fade ${
-                  activeTab === "latest" && "show active"
-                }`}
+                className={`tab-pane fade ${activeTab === "latest" && "show active"
+                  }`}
                 id="latest-news"
                 role="tabpanel"
                 aria-labelledby="latest"
@@ -297,9 +278,8 @@ export default function NewsFeed() {
 
               {User.token && (
                 <div
-                  className={`tab-pane fade ${
-                    activeTab === "announcements" && "show active"
-                  }`}
+                  className={`tab-pane fade ${activeTab === "announcements" && "show active"
+                    }`}
                   id="announcements-news"
                   role="tabpanel"
                   aria-labelledby="announcements"

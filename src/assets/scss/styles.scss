@@ -28,6 +28,9 @@
 @import './../../components/News/NewsHeader/NewsHeader.style.scss';
 @import './../../components/News/NewsSlider/NewsSlider.style.scss';
 @import './../../components/SliderWithThumbnail/SliderWithThumbnail.style.scss';
+@import './../../components/MyMessage/MyMessage.style.scss';
+@import './../../components/OtherMessage/OtherMessage.style.scss';
+@import './../../components/ChatUsersModel/ChatUsersModel.style.scss';
 
 @import './../../components/ProfileCard/ProFileImage/ProFileImage.style.scss';
 
@@ -42,9 +45,10 @@
 @import "./../../index.scss";
 @import "./../../pages/Home/Home.style.scss";
 @import "./../../pages/Profile/Profile.style.scss";
-@import "./../../pages/News/News.style.scss";
+@import "./../../pages/NewsFeed/News.style.scss";
 @import "./../../pages/Lecture/Lecture.style";
 @import "./../../pages/Session/Session.style";
 @import "./../../pages/Settings/Settings.style";
 @import "./../../pages/NotFound/NotFound.style";
 @import "./../../pages/Attendance/Attendance.style.scss";
+@import "./../../pages/Chats/Chats.style.scss";

@@ -14,7 +14,7 @@ i18n
                     TuLaBy: "TuLaBy",
                     notifications: {
                         notifications: "Notifications",
-                        settings:"Notifications Settings",
+                        settings: "Notifications Settings",
                         notification: "Notification",
                         sendAt: "Send At",
                         readAt: "Read At",
@@ -28,6 +28,7 @@ i18n
                         date: "Date",
                         wroteBy: "Wrote By",
                         tags: "Tags",
+                        isBreaking: "Breaking...!",
                         header: {
                             all: "All the news",
                             Popular: "Popular",
@@ -45,10 +46,10 @@ i18n
                         Home: "Home",
                         Attendance: "Attendance",
                         speech: `
-            is an educational platform aims to revolutionize the
-            learning experience for students and streamline
-            administrative tasks for instructors.
-            `,
+                            is an educational platform aims to revolutionize the
+                            learning experience for students and streamline
+                            administrative tasks for instructors.
+                            `,
                         "save": "Save",
                         "next lecture": "Next Lecture",
                         "next session": "Next Session",
@@ -78,8 +79,8 @@ i18n
                         liveNow: "Live Now.!"
                     },
                     security: {
-                        security:"Security",
-                        settings:"Security Settings",
+                        security: "Security",
+                        settings: "Security Settings",
                         Logout: "Logout",
                         Login: "Login",
                         "Enter code": "Enter code",
@@ -203,8 +204,40 @@ i18n
                         "captureQRCode": "Capture QR-Code",
                         notInPlace: "You Are Not In Place To Take your Attendenace, Contact Your Leader."
                     },
-                    settings:{
-                        settings:"Settings..!"
+                    settings: {
+                        settings: "Settings..!"
+                    },
+                    chats: {
+                        chats: "Chats",
+                        search: "Search for people & groups",
+                        noChats: "No Chats Found..!",
+                        welcome: "Hi, Messages Here!",
+                        send: "Send",
+                        typeMessage: "Type Message..."
+                    },
+                    common: {
+                        you: "You",
+                    },
+                    "schedule": {
+                        "empty": {
+                            "title": "No Schedule Available",
+                            "description": "No schedule found for the student.",
+                            "hint": "Your schedule may not have been published yet. Please check again later."
+                        }
+                    },
+                    "lecture": {
+                        "empty": {
+                            "title": "No Upcoming Lectures",
+                            "description": "No upcoming lectures were found.",
+                            "hint": "There are currently no scheduled lectures. Please check again later."
+                        }
+                    },
+                    "session": {
+                        "empty": {
+                            "title": "No Upcoming Session",
+                            "description": "No upcoming sessions were found.",
+                            "hint": "There are currently no scheduled sessions. Please check again later."
+                        }
                     }
                 },
             },
@@ -227,6 +260,7 @@ i18n
                         0: "لا يوجد أخبار..!",
                         date: "التاريخ",
                         tags: "هاشتاج",
+                        isBreaking: "عاااجل...!",
                         header: {
                             all: "كل الاخبار",
                             Popular: "شائع",
@@ -275,9 +309,10 @@ i18n
                         liveNow: "!..شغاله الان"
                     },
                     security: {
-                        security:"الأمن",
-                        settings:"إعدادات الأمن",
-                        Logout: "تسجيل خروج",
+                        security: "الأمن",
+                        settings: "إعدادات الأمن",
+                        Logout: "طلعني من هنا",
+                        // Logout: "تسجيل خروج",
                         Login: "تسجيل دخول",
                         "Enter code": "أدخل الكود",
                         Password: "كلملة السر",
@@ -399,8 +434,40 @@ i18n
                         "captureQRCode": "التقاط رمز الاستجابة السريعة",
                         notInPlace: "!..أنت لست داخل المكان لأخذ حضورك, تواصل مع القائد"
                     },
-                    settings:{
-                        settings:"!..الإعدادات"
+                    settings: {
+                        settings: "!..الإعدادات"
+                    },
+                    chats: {
+                        chats: "المحادثات",
+                        search: "البحث عن الأشخاص والمجموعات",
+                        noChats: "!..لا توجد محادثات",
+                        welcome: "!..مرحباً, الرسائل هنا",
+                        send: "إرسال",
+                        typeMessage: "أكتب رساله..."
+                    },
+                    common: {
+                        you: "أنت"
+                    },
+                    "schedule": {
+                        "empty": {
+                            "title": "لا يوجد جدول متاح",
+                            "description": "لم يتم العثور على جدول للطالب.",
+                            "hint": "قد لا يكون الجدول قد تم نشره بعد. يرجى المحاولة مرة أخرى لاحقًا."
+                        }
+                    },
+                    "lecture": {
+                        "empty": {
+                            "title": "لا توجد محاضرات قادمة",
+                            "description": "لم يتم العثور على محاضرات قادمة.",
+                            "hint": "لا توجد محاضرات مجدولة حالياً. يرجى المحاولة مرة أخرى لاحقاً."
+                        }
+                    },
+                    "session": {
+                        "empty": {
+                            "title": "لا توجد سكاشن قادمة",
+                            "description": "لم يتم العثور على سكاشن قادمة.",
+                            "hint": "لا توجد سكاشن مجدولة حالياً. يرجى المحاولة مرة أخرى لاحقاً."
+                        }
                     }
                 },
             },

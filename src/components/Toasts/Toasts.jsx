@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 import logo from './../../assets/images/logo-light_flat.png'
 
-export default function Toast_Default({setActivate, message,statusIsSuccess = true,time=7000}) {
-  
+export default function Toast_Default({ setActivate, message, statusIsSuccess = true, time = 7000 }) {
+
   const [Status, setStatus] = useState(true);
-  
+
   useEffect(() => {
     setTimeout(() => {
       setStatus(false);
-      setActivate({activate:false})
+      setActivate != null && setActivate({ activate: false })
     }, time);
   }, [])
-  
+
   return (
     <>
       <div className="toast-container position-fixed bottom-0 end-0 p-3">
         <div
           id="liveToast"
-          className={`toast fade  ${!statusIsSuccess && " bg-danger"} ${Status ? "show" : "hide"}`} 
+          className={`toast fade  ${!statusIsSuccess && " bg-danger"} ${Status ? "show" : "hide"}`}
           role="alert"
           aria-live="assertive"
           aria-atomic="true"

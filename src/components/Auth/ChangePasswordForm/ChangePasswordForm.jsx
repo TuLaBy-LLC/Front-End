@@ -2,7 +2,6 @@ import { Form, Formik } from "formik";
 import React, { useContext } from "react";
 import InputField from "../input-field/InputField";
 import { useState } from "react";
-import axios from "axios";
 import * as Yup from "yup";
 import Apis from "../../../Api.json";
 import { useTranslation } from "react-i18next";
@@ -28,9 +27,8 @@ const validationSchema = Yup.object({
     ),
 });
 
-const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
-  Apis.auth.changePassword
-}`;
+const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${Apis.auth.changePassword
+  }`;
 
 export default function ChangePasswordForm({ unique = 1 }) {
   const { User } = useContext(UserContext);
@@ -43,24 +41,31 @@ export default function ChangePasswordForm({ unique = 1 }) {
     setIsLoading(true);
     setAPiErrors(null);
 
-    axios
-      .post(
-        ApiUrl,
-        {
-          currentpassword: values.currentpassword,
-          newpassword: values.newpassword,
-        },
-        { headers: { Authorization: `Bearer ${User.token}` } }
-      )
+    invokeAsync(
+      "post",
+      ApiUrl,
+      User.token,
+      {
+        currentpassword: values.currentpassword,
+        newpassword: values.newpassword,
+      }
+    )
       .then((response) => {
-        if (response.status === 200) {
-          setUpdatedSuccess(response.data.message);
-          document.querySelector("#modal-close")?.click();
+
+        // invokeAsync returns response.data directly
+        if (response) {
+          setUpdatedSuccess(response.message);
+          document
+            .querySelector("#modal-close")
+            ?.click();
         }
+
       })
       .catch((error) => {
         // console.log(error);
-        setAPiErrors(error.response?.data ?? t("errors.apiError"));
+        setAPiErrors(
+          error ?? t("errors.apiError")
+        );
       })
       .finally(() => {
         setIsLoading(false);

@@ -6,6 +6,7 @@ import defaultImage from "./../../../assets/images/user-1.jpg";
 
 export default function NotificationItem({
   isEnglish,
+  currentTime, // to intervalTime
   isFullView = false,
   handleNotificationPopUp,
   notification,
@@ -14,6 +15,8 @@ export default function NotificationItem({
   notificationId,
   id,
 }) {
+  // console.log(notification);
+  
   const sender = notification.sender;
   const [isRead, setIsRead] = useState(readAt);
 

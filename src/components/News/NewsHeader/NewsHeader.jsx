@@ -11,7 +11,7 @@ export default function NewsHeader({
   id = "b07cfd61-a633-4349-802a-3224fcc6c5b4",
   title = "Business-focused",
   titleAR = "",
-  coverImage = "https://localhost:7018/images/articles/http://lorempixel.com/640/480/cats",
+  coverImage = "",
   publicationDate = "2024-04-15T00:47:01.2205724",
   views = 244,
   publisherId,

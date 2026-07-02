@@ -48,5 +48,16 @@
   "notifications":{
     "notifications": "/api/notifications",
     "notification": "/api/notifications/notification"
+  },
+
+  "chats": {
+    "getAllClubs": "/chats/IndexJson",
+    "getClubMessages": "/chats/getClubMessages",
+    "ReactToMessage":"/chats/editReact",
+    "sendMessage": "/chats/sendMessage",
+    "deleteMessage": "/chats/deleteMessage",
+    "editMessage": "/chats/editMessage",
+    "messageInfo":"/chats/GetMessage",
+    "getAllClubUsers":"/api/Clubs"
   }
 }

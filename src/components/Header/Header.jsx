@@ -20,6 +20,7 @@ export default function Header() {
   const { sideBarOptions, setSideBarOptions } = useContext(SideBarContext);
 
   const { t, i18n } = useTranslation();
+  // console.log(User);
 
   const changeLanguage_ = () => {
     // console.log(i18n);
@@ -95,13 +96,12 @@ export default function Header() {
                       aria-expanded="false"
                     >
                       <img
-                        src={User.imageName}
+                        src={User.imageName || userImg}
                         alt=""
                         width="35"
                         height="35"
-                        className={`rounded-circle ${
-                          User.imageName ? "" : "placeholder"
-                        }`}
+                        className={`rounded-circle ${User.imageName ? "" : "placeholder"
+                          }`}
                       />
                     </button>
                     <div

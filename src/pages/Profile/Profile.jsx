@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Apis from "./../../Api.json";
 import LoadingComponent from "../../components/loading/Loading";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
 import EditProfile from "../../components/EditProfile/EditProfile";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
@@ -10,7 +9,7 @@ import UserContext from "../../contexts/UserContextProvider";
 import { useQuery } from "react-query";
 import Error from "../../components/Error/Error";
 import { Navigate } from "react-router-dom";
-import { InvokeAPI } from "../../Services/api";
+import { invokeAsync } from "../../Services/api";
 
 const ApiUrl = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.profile.profile
@@ -23,7 +22,7 @@ export default function Profile() {
 
   const { data, isLoading, error, isError, refetch } = useQuery(
     `profileData:${User.token}`,
-    (_) => InvokeAPI(ApiUrl, User.token),
+    (_) => invokeAsync("get",ApiUrl, User.token),
     {
       staleTime: 60 * 60 * 60,
       retry: 2,
@@ -51,9 +50,9 @@ export default function Profile() {
       {isLoading ? (
         <LoadingComponent />
       ) : isError ? (
-        <Error {...error} />
+        <Error {...error}  t={t} i18n={i18n}/>
       ) : data == null ? (
-        <Error message="Some Thing Went Wrong..!" />
+        <Error t={t} i18n={i18n} message="Some Thing Went Wrong..!" />
       ) : (
         <div className="user-details py-0 py-xl-4">
           <div className="content">

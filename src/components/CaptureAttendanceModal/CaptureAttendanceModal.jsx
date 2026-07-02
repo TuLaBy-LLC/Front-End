@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useZxing } from "react-zxing";
-import axios from "axios";
 import Apis from "./../../Api.json";
 import { getPosition, isPersonInPosition } from "../../Helpers/positions";
+import { invokeAsync } from "../../Services/api";
 
 const ApiUrl_Lecture = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.recordLectureAttend
 }`;
+
 const ApiUrl_Session = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_KEY}${
   Apis.recordSessionAttend
 }`;
@@ -23,6 +24,7 @@ export default function CaptureAttendanceModal({
   const [result, setResult] = useState("");
   const [positionStatus, setPositionStatus] = useState(false);
   const [scanNow, setScanNow] = useState(false);
+
   const { ref } = useZxing({
     onDecodeResult(result) {
       setResult(result.getText());
@@ -34,8 +36,7 @@ export default function CaptureAttendanceModal({
   useEffect(() => {
     if (place != null) {
       isPersonInPosition(place).then((res) => {
-        // console.log(res);
-        setPositionStatus(true);
+        setPositionStatus(res);
       });
     }
   }, [place]);
@@ -49,40 +50,51 @@ export default function CaptureAttendanceModal({
 
   const handleSubmit = async () => {
     setScanNow(false);
-    if (result === "" || result === null) return;
 
-    const url = type === "lecture" ? ApiUrl_Lecture : ApiUrl_Session;
-    const { latitude, longitude } = await getPosition();
-    // console.log({ latitude, longitude });
+    if (result === "" || result === null)
+      return;
 
-    await axios
-      .post(
-        `${url}`,
+    const url =
+      type === "lecture"
+        ? ApiUrl_Lecture
+        : ApiUrl_Session;
+
+    const { latitude, longitude } =
+      await getPosition();
+
+    try {
+      const data = await invokeAsync(
+        "post",
+        url,
+        token,
         {
           eventCode,
           subjectCode,
           otp: result,
-          position: { latitude, longitude },
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          position: {
+            latitude,
+            longitude,
+          },
         }
-      )
-      .then(({ data }) => {
-        setResponse({ status: true, ...data });
-      })
-      .catch(({ response: { data } }) => {
-        setResponse({
-          status: true,
-          ...data,
-        });
+      );
+
+      setResponse({
+        status: true,
+        ...data,
       });
+
+    } catch (error) {
+
+      setResponse({
+        status: false,
+        ...error,
+      });
+    }
   };
 
   const handleInputChange = (e) => {
     setResult(e.target.value);
   };
-  // console.log(response);
 
   return (
     <>
@@ -96,21 +108,28 @@ export default function CaptureAttendanceModal({
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="cature-attendanceLabel">
-                {t("captureAttendance.title")} {/* Translate this title */}
+              <h1
+                className="modal-title fs-5"
+                id="cature-attendanceLabel"
+              >
+                {t("captureAttendance.title")}
               </h1>
+
               <button
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
-                aria-label={t("misc.close")} // Use translation for close button
+                aria-label={t("misc.close")}
                 onClick={() => setScanNow(false)}
               />
             </div>
+
             <div className="modal-body row align-items-center flex-column gap-3 p-0">
               <div className="col-8">
                 <video
-                  className={`w-100 rounded-2 ${!scanNow && "d-none"}`}
+                  className={`w-100 rounded-2 ${
+                    !scanNow && "d-none"
+                  }`}
                   ref={ref}
                 />
               </div>
@@ -124,6 +143,7 @@ export default function CaptureAttendanceModal({
                 >
                   {t("captureAttendance.scanNow")}
                 </button>
+
                 {scanNow && (
                   <button
                     type="button"
@@ -133,6 +153,7 @@ export default function CaptureAttendanceModal({
                     {t("captureAttendance.paused")}
                   </button>
                 )}
+
                 {!positionStatus && (
                   <p className="m-0 mt-3 text-danger">
                     {t("captureAttendance.notInPlace")}
@@ -140,25 +161,30 @@ export default function CaptureAttendanceModal({
                 )}
 
                 <p
-                  className={`response mx-auto mb-0 mt-3
-                    ${
-                      response?.statusCode < 400
-                        ? "text-success"
-                        : "text-danger"
-                    }`}
+                  className={`response mx-auto mb-0 mt-3 ${
+                    response?.statusCode < 400
+                      ? "text-success"
+                      : "text-danger"
+                  }`}
                 >
-                  {lang === "en" ? response.message : response.messageAR}
+                  {lang === "en"
+                    ? response.message
+                    : response.messageAR}
                 </p>
               </div>
             </div>
+
             <div className="modal-footer">
               <button
                 className="btn btn-primary"
-                disabled={result === "" && !positionStatus}
+                disabled={
+                  result === "" && !positionStatus
+                }
                 onClick={handleSubmit}
               >
                 {t("misc.ok")}
               </button>
+
               <button
                 className="btn btn-outline-dark"
                 data-bs-target="#code-modal"
@@ -171,6 +197,7 @@ export default function CaptureAttendanceModal({
           </div>
         </div>
       </div>
+
       <div
         className="modal fade"
         id="code-modal"
@@ -180,10 +207,15 @@ export default function CaptureAttendanceModal({
       >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
+
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="cature-attendanceLabel2">
+              <h1
+                className="modal-title fs-5"
+                id="cature-attendanceLabel2"
+              >
                 {t("captureAttendance.typeCodeTitle")}
               </h1>
+
               <button
                 type="button"
                 className="btn-close"
@@ -192,20 +224,25 @@ export default function CaptureAttendanceModal({
                 onClick={() => setScanNow(false)}
               />
             </div>
-            <div className="modal-body ">
+
+            <div className="modal-body">
               <div className="form-floating mb-3">
                 <input
                   type="text"
                   className="form-control"
                   id="code-input"
                   disabled={!positionStatus}
-                  placeholder={t("captureAttendance.enterCode")}
+                  placeholder={t(
+                    "captureAttendance.enterCode"
+                  )}
                   value={result}
                   onChange={handleInputChange}
                 />
+
                 <label htmlFor="code-input">
                   {t("captureAttendance.code")}
                 </label>
+
                 {!positionStatus && (
                   <p className="m-0 mt-3 text-danger">
                     {t("captureAttendance.notInPlace")}
@@ -214,31 +251,40 @@ export default function CaptureAttendanceModal({
               </div>
 
               <p
-                className={`response mx-auto mb-0 mt-3
-                  ${
-                    response?.statusCode < 400 ? "text-success" : "text-danger"
-                  }`}
+                className={`response mx-auto mb-0 mt-3 ${
+                  response?.statusCode < 400
+                    ? "text-success"
+                    : "text-danger"
+                }`}
               >
-                {lang === "en" ? response.message : response.messageAR}
+                {lang === "en"
+                  ? response.message
+                  : response.messageAR}
               </p>
             </div>
+
             <div className="modal-footer">
               <button
                 className="btn btn-primary"
-                disabled={!positionStatus && result === ""}
+                disabled={
+                  !positionStatus && result === ""
+                }
                 onClick={handleSubmit}
               >
-                {t("misc.ok")} {/* Translate OK button */}
+                {t("misc.ok")}
               </button>
+
               <button
                 className="btn btn-outline-dark"
                 data-bs-target="#cature-attendance"
                 data-bs-toggle="modal"
               >
-                {t("captureAttendance.captureQRCode")}
-                {/* Translate Capture QR-Code button */}
+                {t(
+                  "captureAttendance.captureQRCode"
+                )}
               </button>
             </div>
+
           </div>
         </div>
       </div>

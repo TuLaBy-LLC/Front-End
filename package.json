@@ -8,9 +8,15 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:staging": "vite --mode staging",
+
     "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "build:staging": "vite build --mode staging",
+    "build:production": "vite build --mode production",
+
+    "preview": "vite preview",
+
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@microsoft/signalr": "^8.0.7",
