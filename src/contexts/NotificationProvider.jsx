@@ -119,7 +119,7 @@ export default function NotificationProvider({
           setNewNotification(true);
 
           setNotifications(prev => [
-            notification,
+            ...notification,
             ...prev
           ]);
         }
