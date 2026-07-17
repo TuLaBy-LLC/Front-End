@@ -59,5 +59,10 @@
     "editMessage": "/chats/editMessage",
     "messageInfo":"/chats/GetMessage",
     "getAllClubUsers":"/api/Clubs"
+  },
+  "invoices":{
+    "all" : "/api/Payments",
+    "checkout":"/api/Payments/checkout",
+    "receipt":"/api/Payments/receipt"
   }
 }

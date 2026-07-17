@@ -13,6 +13,7 @@ import Settings from "./pages/Settings/Settings";
 import Chats from "./pages/Chats/Chats";
 import NewsFeed from "./pages/NewsFeed/NewsFeed";
 import NewsDetails from "./pages/NewsFeed/NewsDetails";
+import Invoices from "./pages/Invoices/Invoices";
 
 const routes = createBrowserRouter([
   {
@@ -88,6 +89,30 @@ const routes = createBrowserRouter([
         element: (
           <PageGuard>
             <Chats />
+          </PageGuard>
+        ),
+      },
+      {
+        path: "invoices",
+        element: (
+          <PageGuard>
+            <Invoices />
+          </PageGuard>
+        ),
+      },
+      {
+        path: "payment/success",
+        element: (
+          <PageGuard>
+            <Invoices success={{isSuccess:true}} />
+          </PageGuard>
+        ),
+      },
+      {
+        path: "payment/cancel",
+        element: (
+          <PageGuard>
+            <Invoices success={{isSuccess:false}} />
           </PageGuard>
         ),
       },

@@ -238,6 +238,68 @@ i18n
                             "description": "No upcoming sessions were found.",
                             "hint": "There are currently no scheduled sessions. Please check again later."
                         }
+                    },
+                    invoices: {
+                        title: "Invoices",
+                        myInvoices: "My Invoices",
+                        loading: "Loading invoices...",
+                        noInvoices: "No invoices are available.",
+                        failedToRetrieveReceipt: "Unable to retrieve the invoice receipt.",
+                        unableToCreateCheckout: "Unable to start the Stripe checkout process.",
+                        checkoutUrlMissing: "The checkout session URL was not returned by the server."
+                    },
+                    invoiceInformation: {
+                        title: "Invoice Information",
+                        invoiceId: "Invoice ID",
+                        status: "Status",
+                        subjects: "Subjects",
+                        subjectsCount: "Subject(s)",
+                        totalAmount: "Total Amount",
+                        createdAt: "Created At",
+                        paidAt: "Paid At",
+                        waitingForPayment: "Waiting for payment"
+                    },
+
+                    paymentSummary: {
+                        title: "Payment Summary",
+                        description: "Review your invoice payment details.",
+                        invoiceTotal: "Invoice Total",
+                        paymentStatus: "Payment Status",
+                        paymentDate: "Payment Date",
+                        paymentDetails: "Payment Details",
+                        paymentMethod: "Payment Method",
+                        gateway: "Payment Gateway",
+                        transactionId: "Transaction ID",
+                        currency: "Egyptian Pound (EGP)",
+                        notPaidYet: "Not Paid Yet",
+                        statusPaid: "This invoice has been paid successfully.",
+                        statusPending: "This invoice is awaiting payment.",
+                        printInvoice: "Print Invoice",
+                        payWithStripe: "Pay with Stripe"
+                    },
+
+                    common: {
+                        paid: "Paid",
+                        pending: "Pending",
+                        cancelled: "Cancelled",
+                        unknown: "Unknown",
+                        egp: "EGP",
+                        back: "Back",
+                        all: "All",
+                        successfullyPaid: "You Successfully Paid Your Invoice.",
+                        failedToPaid: "Failed To Pay your Invoice."
+
+                    },
+                    invoiceItems: {
+                        title: "Invoice Subjects",
+                        description: "Subjects included in this invoice.",
+                        subject: "Subject",
+                        subjectsCount: "Subject(s)",
+                        credits: "Credits",
+                        semester: "Semester",
+                        price: "Price",
+                        view: "View",
+                        noSubjects: "No subjects were found in this invoice."
                     }
                 },
             },
@@ -278,8 +340,8 @@ i18n
                         Home: "الصفحة الرئيسيه",
                         Attendance: "الغياب والحضور",
                         speech: `
-            منصة تعليمية تهدف إلى ثورة في تجربة التعلم للطلاب وتسهيل المهام الإدارية للمدرسين.
-            `,
+                            منصة تعليمية تهدف إلى ثورة في تجربة التعلم للطلاب وتسهيل المهام الإدارية للمدرسين.
+                            `,
                         "save": "حفظ",
                         "next lecture": "المحاضره القادمه",
                         "next session": "المعمل القادم",
@@ -468,6 +530,67 @@ i18n
                             "description": "لم يتم العثور على سكاشن قادمة.",
                             "hint": "لا توجد سكاشن مجدولة حالياً. يرجى المحاولة مرة أخرى لاحقاً."
                         }
+                    },
+                    invoices: {
+                        title: "الفواتير",
+                        myInvoices: "فواتيري",
+                        loading: "جارٍ تحميل الفواتير...",
+                        noInvoices: "لا توجد فواتير متاحة.",
+                        failedToRetrieveReceipt: "تعذر استرجاع إيصال الفاتورة.",
+                        unableToCreateCheckout: "تعذر بدء عملية الدفع.",
+                        checkoutUrlMissing: "لم يتم إرجاع رابط جلسة الدفع من الخادم."
+                    },
+                    invoiceInformation: {
+                        title: "معلومات الفاتورة",
+                        invoiceId: "رقم الفاتورة",
+                        status: "الحالة",
+                        subjects: "المواد",
+                        subjectsCount: "مادة",
+                        totalAmount: "إجمالي المبلغ",
+                        createdAt: "تاريخ الإنشاء",
+                        paidAt: "تاريخ الدفع",
+                        waitingForPayment: "في انتظار الدفع"
+                    },
+
+                    paymentSummary: {
+                        title: "ملخص الدفع",
+                        description: "راجع تفاصيل دفع الفاتورة.",
+                        invoiceTotal: "إجمالي الفاتورة",
+                        paymentStatus: "حالة الدفع",
+                        paymentDate: "تاريخ الدفع",
+                        paymentDetails: "تفاصيل الدفع",
+                        paymentMethod: "طريقة الدفع",
+                        gateway: "بوابة الدفع",
+                        transactionId: "رقم العملية",
+                        currency: "الجنيه المصري (EGP)",
+                        notPaidYet: "لم يتم الدفع بعد",
+                        statusPaid: "تم سداد هذه الفاتورة بنجاح.",
+                        statusPending: "هذه الفاتورة بانتظار السداد.",
+                        printInvoice: "طباعة الفاتورة",
+                        payWithStripe: "الدفع عبر Stripe"
+                    },
+
+                    common: {
+                        paid: "مدفوعة",
+                        pending: "قيد الانتظار",
+                        cancelled: "ملغاة",
+                        unknown: "غير معروف",
+                        egp: "ج.م",
+                        back: "رجوع",
+                        all: "الكل",
+                        successfullyPaid: "تم سداد الفاتورة بنجاح.",
+                        failedToPaid: "فشل دفع فاتورتك."
+                    },
+                    invoiceItems: {
+                        title: "مواد الفاتورة",
+                        description: "المواد المشمولة في هذه الفاتورة.",
+                        subject: "المادة",
+                        subjectsCount: "مادة",
+                        credits: "الساعات",
+                        semester: "الفصل الدراسي",
+                        price: "السعر",
+                        view: "عرض",
+                        noSubjects: "لا توجد مواد ضمن هذه الفاتورة."
                     }
                 },
             },
