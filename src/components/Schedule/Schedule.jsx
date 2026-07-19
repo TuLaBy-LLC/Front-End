@@ -47,7 +47,7 @@ const dayNames = {
 };
 
 export default function Schedule({ schedule, i18n, t }) {
-
+  
   // Generate array of 7 days starting from the schedule's start date
   const days = Array.from({ length: 7 }, (_, i) => {
     const dayDate = new Date(schedule.starting);

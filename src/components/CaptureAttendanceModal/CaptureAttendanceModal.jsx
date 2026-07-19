@@ -41,6 +41,22 @@ export default function CaptureAttendanceModal({
     }
   }, [place]);
 
+
+  useEffect(() => {
+    const modalEl = document.getElementById("cature-attendance");
+    const codeModalEl = document.getElementById("code-modal");
+
+    const stopScanning = () => setScanNow(false);
+
+    modalEl?.addEventListener("hidden.bs.modal", stopScanning);
+    codeModalEl?.addEventListener("hidden.bs.modal", stopScanning);
+
+    return () => {
+      modalEl?.removeEventListener("hidden.bs.modal", stopScanning);
+      codeModalEl?.removeEventListener("hidden.bs.modal", stopScanning);
+    };
+  }, []);
+
   const [response, setResponse] = useState({
     status: false,
     message: null,
@@ -59,10 +75,10 @@ export default function CaptureAttendanceModal({
         ? ApiUrl_Lecture
         : ApiUrl_Session;
 
-    const { latitude, longitude } =
-      await getPosition();
-
     try {
+      const { latitude, longitude } =
+        await getPosition();
+
       const data = await invokeAsync(
         "post",
         url,
@@ -178,7 +194,7 @@ export default function CaptureAttendanceModal({
               <button
                 className="btn btn-primary"
                 disabled={
-                  result === "" && !positionStatus
+                  result === "" || !positionStatus
                 }
                 onClick={handleSubmit}
               >
@@ -267,7 +283,7 @@ export default function CaptureAttendanceModal({
               <button
                 className="btn btn-primary"
                 disabled={
-                  !positionStatus && result === ""
+                  !positionStatus || result === ""
                 }
                 onClick={handleSubmit}
               >

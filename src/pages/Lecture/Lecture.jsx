@@ -21,9 +21,13 @@ const ApiUrl_LectureStatistics = `${import.meta.env.VITE_REACT_APP_BASE_URL_API_
   }${Apis.getLectureStatistics}`;
 
 // Add months and format the updated date
-const currentDate = new Date().toDateString();
 
 export default function Lecture() {
+const now = new Date();
+
+const currentDate =
+  `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T00:01:00`;
+
   const { sideBarOptions, setSideBarOptions } = useContext(SideBarContext);
   const { User, updateUser } = useContext(UserContext);
   const { t, i18n } = useTranslation();
@@ -56,7 +60,7 @@ export default function Lecture() {
       },
     }
   );
-  // console.log(dataLecture);
+  console.log(dataLecture);
 
   const {
     data: dataLectureStatistics,
